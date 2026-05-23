@@ -257,6 +257,7 @@
             margin-top: 12px;
             border: 1px solid #2f3a6b;
         }
+        /* Единый каталог товаров - сетка */
         .goods-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -329,10 +330,6 @@
             cursor: pointer;
             width: 100%;
         }
-        .rank-select option {
-            background: #0f1629;
-            color: white;
-        }
         .change-pwd, .edit-member {
             background: #2a3550;
             border: 1px solid #5e6da8;
@@ -340,10 +337,6 @@
             padding: 6px 12px;
             font-size: 12px;
             cursor: pointer;
-            transition: 0.2s;
-        }
-        .change-pwd:hover, .edit-member:hover {
-            background: #3f4a7c;
         }
         .permission-info {
             font-size: 12px;
@@ -363,9 +356,6 @@
             padding: 4px 12px;
             border-radius: 40px;
             font-size: 12px;
-        }
-        .delete-post:hover {
-            background: #6a2a2a;
         }
         .image-preview {
             margin-top: 10px;
@@ -465,9 +455,10 @@
             </div>
         </div>
 
+        <!-- ЕДИНЫЙ КАТАЛОГ ТОВАРОВ -->
         <div id="goodsPane" class="tab-pane">
             <div class="card">
-                <h3>📦 Каталог товаров</h3>
+                <h3>📦 Единый каталог товаров</h3>
                 <div class="goods-grid" id="goodsContainer"></div>
                 <hr>
                 <h4>➕ Добавить товар</h4>
@@ -542,7 +533,6 @@
     ];
     let posts = JSON.parse(localStorage.getItem("darkside_posts_final")) || [];
 
-    // РАЗНЫЕ ВЕБХУКИ
     const DISCORD_WEBHOOK_POSTS = "https://discord.com/api/webhooks/1507608195848474675/SUuWWtm97VRdEzAngZra-FhRoDOupa1eONPmi2D5xNof_LXHwXk0ldQLOD0znPhAV6va";
     const DISCORD_WEBHOOK_CATALOG = "https://discord.com/api/webhooks/1507608110792183859/MhNRYv5SWCtZ6D35qfL_EBFoaewKob--uXHnnBLpCs1SS1A9C3Rqq11PAfKP9bO6JdkR";
     let depositCooldown = false;
@@ -560,46 +550,30 @@
 
     function isAdmin() { return currentUser && currentUser.isAdmin === true; }
     
-    // Отправка поста в свой вебхук
     async function sendPostToDiscord(title, text, imageUrl, author) {
         let content = `**📢 НОВЫЙ ПОСТ ОТ ${author.toUpperCase()}**\n\n**${title}**\n\n${text}`;
         if (imageUrl && imageUrl.trim() !== "") content += `\n\n🖼️ Изображение: ${imageUrl}`;
         try {
-            await fetch(DISCORD_WEBHOOK_POSTS, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ content: content })
-            });
+            await fetch(DISCORD_WEBHOOK_POSTS, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: content }) });
             showToast("📢 Пост также отправлен в Discord");
-        } catch(e) { console.warn("Discord send error", e); }
+        } catch(e) { console.warn(e); }
     }
 
-    // Отправка нового товара в каталоговый вебхук
     async function sendGoodsToDiscord(name, price, desc) {
-        let content = `**📦 НОВЫЙ ТОВАР В КАТАЛОГЕ**\n\n**${name}**\n💰 Цена: ${price} RUB\n📝 Описание: ${desc || "—"}`;
+        let content = `**📦 НОВЫЙ ТОВАР В ЕДИНОМ КАТАЛОГЕ**\n\n**${name}**\n💰 Цена: ${price} RUB\n📝 Описание: ${desc || "—"}`;
         try {
-            await fetch(DISCORD_WEBHOOK_CATALOG, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ content: content })
-            });
-            showToast("📢 Товар также отправлен в каталоговый Discord");
-        } catch(e) { console.warn("Discord send error", e); }
+            await fetch(DISCORD_WEBHOOK_CATALOG, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: content }) });
+            showToast("📢 Товар также отправлен в Discord-канал каталога");
+        } catch(e) { console.warn(e); }
     }
 
     function updatePermissionsUI() {
         const admin = isAdmin();
-        const fields = [
-            "jobTitle","jobRewardInput","jobDesc","createJobBtn",
-            "goodName","goodPrice","goodDesc","addGoodBtn",
-            "depositSum","depositBtn","withdrawBtn",
-            "newMemberName","newMemberRole","newMemberPass","addMemberBtn",
-            "postTitle","postText","postImageUrl","createPostBtn"
-        ];
+        const fields = ["jobTitle","jobRewardInput","jobDesc","createJobBtn","goodName","goodPrice","goodDesc","addGoodBtn","depositSum","depositBtn","withdrawBtn","newMemberName","newMemberRole","newMemberPass","addMemberBtn","postTitle","postText","postImageUrl","createPostBtn"];
         fields.forEach(id => { let el = document.getElementById(id); if(el) el.disabled = !admin; });
-        document.getElementById("postsPermissionInfo").innerHTML = admin ? "✅ У вас есть права на создание постов (посты видны на сайте и в Discord)" : "⛔ Только админы могут создавать посты";
+        document.getElementById("postsPermissionInfo").innerHTML = admin ? "✅ У вас есть права на создание постов" : "⛔ Только админы могут создавать посты";
         document.getElementById("jobsPermissionInfo").innerHTML = admin ? "✅ У вас есть права" : "⛔ Только админы могут создавать заказы";
-        document.getElementById("goodsPermissionInfo").innerHTML = admin ? "✅ У вас есть права на добавление товаров (товары дублируются в каталоговый Discord)" : "⛔ Только админы могут добавлять товары";
+        document.getElementById("goodsPermissionInfo").innerHTML = admin ? "✅ У вас есть права на добавление товаров" : "⛔ Только админы могут добавлять товары";
         document.getElementById("financePermissionInfo").innerHTML = admin ? "✅ У вас есть права на управление общаком" : "⛔ Только админы могут управлять общаком";
         document.getElementById("membersPermissionInfo").innerHTML = admin ? "✅ У вас есть права на управление участниками" : "⛔ Только админы могут управлять участниками";
     }
@@ -617,24 +591,20 @@
     window.editMember = function(username) {
         if (!isAdmin()) { showToast("Недостаточно прав"); return; }
         let member = gangMembers.find(m => m.username === username);
-        if (!member) { showToast("Участник не найден"); return; }
+        if (!member) return;
         let newNick = prompt(`Введите новый никнейм для ${username}:`, username);
-        if (!newNick || newNick.trim() === "") { showToast("Никнейм не может быть пустым"); return; }
+        if (!newNick || newNick.trim() === "") return;
         if (newNick !== username && gangMembers.find(m => m.username === newNick)) { showToast("Такой никнейм уже существует"); return; }
         let roles = ["Бегунок", "Боец", "Крышевало", "Дилер", "Логист", "Правая рука", "Лидер"];
         let newRole = prompt(`Введите новую роль для ${newNick} (доступные: ${roles.join(", ")}):`, member.role);
-        if (!newRole || !roles.includes(newRole)) { showToast("Неверная роль"); return; }
+        if (!newRole || !roles.includes(newRole)) return;
         let oldUsername = member.username;
         member.username = newNick.trim();
         member.role = newRole;
         member.isAdmin = (newRole === "Лидер" || newRole === "Правая рука");
-        if (currentUser && currentUser.username === oldUsername) {
-            currentUser.username = newNick.trim();
-            currentUser.role = newRole;
-            currentUser.isAdmin = member.isAdmin;
-        }
+        if (currentUser && currentUser.username === oldUsername) { currentUser.username = newNick.trim(); currentUser.role = newRole; currentUser.isAdmin = member.isAdmin; }
         saveAll();
-        showToast(`Участник ${oldUsername} изменён → ${newNick} (${newRole})`);
+        showToast(`Участник изменён → ${newNick} (${newRole})`);
     };
 
     function refreshUI() {
@@ -682,47 +652,33 @@
             gangMembers.forEach((m, idx) => {
                 let adminBadge = m.isAdmin ? '<span class="role-badge admin-badge">Админ</span>' : '';
                 let canManage = isAdmin();
-                membersDiv.innerHTML += `
-                    <div class="member-item">
-                        <div><strong>${escapeHtml(m.username)}</strong> ${adminBadge}<br><span class="tag">${m.role}</span></div>
-                        <div style="display: flex; gap: 8px;">
-                            ${canManage ? `<button class="edit-member" onclick="editMember('${escapeHtml(m.username)}')">✏️ Изменить роль/ник</button>` : ''}
-                            ${canManage ? `<button class="change-pwd" onclick="showChangePasswordFor('${escapeHtml(m.username)}')">🔐 Сменить пароль</button>` : ''}
-                            ${canManage ? `<button class="btn btn-outline" onclick="removeMember(${idx})">❌ Исключить</button>` : ''}
-                        </div>
-                    </div>
-                `;
+                membersDiv.innerHTML += `<div class="member-item"><div><strong>${escapeHtml(m.username)}</strong> ${adminBadge}<br><span class="tag">${m.role}</span></div><div style="display: flex; gap: 8px;">${canManage ? `<button class="edit-member" onclick="editMember('${escapeHtml(m.username)}')">✏️ Изменить роль/ник</button>` : ''}${canManage ? `<button class="change-pwd" onclick="showChangePasswordFor('${escapeHtml(m.username)}')">🔐 Сменить пароль</button>` : ''}${canManage ? `<button class="btn btn-outline" onclick="removeMember(${idx})">❌ Исключить</button>` : ''}</div></div>`;
             });
         }
         updatePermissionsUI();
     }
 
-    window.deletePost = function(idx) { if(isAdmin()) { posts.splice(idx,1); saveAll(); showToast("Пост удалён"); } else showToast("Недостаточно прав"); };
+    window.deletePost = function(idx) { if(isAdmin()) { posts.splice(idx,1); saveAll(); showToast("Пост удалён"); } };
     document.getElementById("createPostBtn")?.addEventListener("click", async () => {
-        if(!isAdmin()) { showToast("Только админы могут создавать посты"); return; }
+        if(!isAdmin()) return;
         let title = document.getElementById("postTitle").value.trim();
         let text = document.getElementById("postText").value.trim();
         let imageUrl = document.getElementById("postImageUrl").value.trim();
-        if(!title || !text) { showToast("Введите заголовок и текст"); return; }
+        if(!title || !text) return;
         posts.push({ title, text, author: currentUser.username, date: new Date().toLocaleString(), imageUrl: imageUrl || null });
         saveAll();
-        document.getElementById("postTitle").value = ""; document.getElementById("postText").value = ""; document.getElementById("postImageUrl").value = ""; document.getElementById("imagePreview").style.display = "none";
-        showToast("Пост опубликован на сайте!");
+        document.getElementById("postTitle").value = ""; document.getElementById("postText").value = ""; document.getElementById("postImageUrl").value = "";
         await sendPostToDiscord(title, text, imageUrl, currentUser.username);
+        showToast("Пост опубликован!");
     });
 
     window.showChangePasswordFor = function(username) {
-        if (!isAdmin()) { showToast("Недостаточно прав"); return; }
-        let newPassword = prompt(`Введите новый пароль для участника ${username}:`);
+        if (!isAdmin()) return;
+        let newPassword = prompt(`Новый пароль для ${username}:`);
         if (newPassword && newPassword.trim() !== "") {
             let member = gangMembers.find(m => m.username === username);
-            if (member) {
-                member.password = newPassword.trim();
-                if (currentUser && currentUser.username === username) currentUser.password = newPassword.trim();
-                saveAll();
-                showToast(`Пароль для ${username} изменён`);
-            }
-        } else if (newPassword !== null) showToast("Пароль не может быть пустым");
+            if (member) { member.password = newPassword.trim(); if (currentUser && currentUser.username === username) currentUser.password = newPassword.trim(); saveAll(); showToast(`Пароль изменён`); }
+        }
     };
     document.getElementById("changeOwnPasswordBtn")?.addEventListener("click", () => {
         if (!currentUser) return;
@@ -736,34 +692,32 @@
     window.completeJob = function(idx) {
         let job = jobs[idx];
         if(job.reward && typeof job.reward === 'number') { obshak += job.reward; financeHistory.unshift(`✅ Дело "${job.title}" +${job.reward} RUB`); }
-        else financeHistory.unshift(`✅ Дело "${job.title}" выполнено`);
         jobs.splice(idx,1); saveAll(); showToast("Дело выполнено!");
     };
     window.removeGood = function(idx) { goodsCatalog.splice(idx,1); saveAll(); showToast("Товар удалён"); };
-    document.getElementById("createJobBtn")?.addEventListener("click", async () => {
+    document.getElementById("createJobBtn")?.addEventListener("click", () => {
         if(!isAdmin()) return;
         let title = document.getElementById("jobTitle").value.trim();
         let rewardRaw = document.getElementById("jobRewardInput").value.trim();
         let desc = document.getElementById("jobDesc").value.trim();
-        if(!title) { showToast("Введите название"); return; }
-        let reward = null, rewardShow = "—";
-        if(rewardRaw !== "" && rewardRaw !== "-") { let p = parseFloat(rewardRaw); if(isNaN(p)||p<0) return; reward = p; rewardShow = p+" RUB"; }
-        jobs.push({ title, reward, desc: desc||"Банда ждёт" });
+        if(!title) return;
+        let reward = null;
+        if(rewardRaw !== "" && rewardRaw !== "-") { let p = parseFloat(rewardRaw); if(!isNaN(p)&&p>=0) reward = p; }
+        jobs.push({ title, reward, desc: desc || "Банда ждёт" });
         saveAll();
         document.getElementById("jobTitle").value=""; document.getElementById("jobRewardInput").value=""; document.getElementById("jobDesc").value="";
         showToast(`Дело "${title}" создано`);
-        // дела отправляются в каталоговый вебхук? оставим без дублирования или можно добавить, но не сказано. Оставлю без
     });
     document.getElementById("addGoodBtn")?.addEventListener("click", async () => {
         if(!isAdmin()) return;
         let name = document.getElementById("goodName").value.trim();
         let price = parseFloat(document.getElementById("goodPrice").value);
         let desc = document.getElementById("goodDesc").value.trim();
-        if(!name || isNaN(price)) { showToast("Введите название и цену"); return; }
+        if(!name || isNaN(price)) return;
         goodsCatalog.push({ name, price, desc: desc || "" });
         saveAll();
         document.getElementById("goodName").value=""; document.getElementById("goodPrice").value=""; document.getElementById("goodDesc").value="";
-        showToast(`Товар "${name}" добавлен в каталог`);
+        showToast(`Товар "${name}" добавлен в единый каталог`);
         await sendGoodsToDiscord(name, price, desc);
     });
     document.getElementById("depositBtn")?.addEventListener("click",()=>{
@@ -784,11 +738,11 @@
         saveAll(); showToast(`Выдано ${sum} RUB`);
     });
     document.getElementById("addMemberBtn")?.addEventListener("click",()=>{
-        if(!isAdmin()) { showToast("Только админы могут добавлять"); return; }
+        if(!isAdmin()) return;
         let name = document.getElementById("newMemberName").value.trim();
         let role = document.getElementById("newMemberRole").value;
         let pass = document.getElementById("newMemberPass").value.trim();
-        if(!name || !pass) { showToast("Введите ник и пароль"); return; }
+        if(!name || !pass) return;
         if(gangMembers.find(m=>m.username===name)) { showToast("Уже есть"); return; }
         let isAdminRole = (role === "Лидер" || role === "Правая рука");
         gangMembers.push({ username: name, password: pass, role: role, isAdmin: isAdminRole });
@@ -797,13 +751,14 @@
         showToast(`${name} принят в банду (${role})!`);
     });
     window.removeMember = function(idx) {
-        if(!isAdmin()) { showToast("Недостаточно прав"); return; }
+        if(!isAdmin()) return;
         let removed = gangMembers[idx];
-        if(removed.isAdmin && currentUser.username !== "Shcolar") { showToast("Только лидер может исключить другого админа"); return; }
+        if(removed.isAdmin && currentUser.username !== "Shcolar") { showToast("Только лидер может исключить админа"); return; }
         gangMembers.splice(idx,1);
         saveAll();
         showToast(`${removed.username} исключён`);
     };
+    
     document.getElementById("doLoginBtn")?.addEventListener("click",()=>{
         let user = document.getElementById("loginUsername").value.trim();
         let pass = document.getElementById("loginPassword").value;
@@ -816,12 +771,14 @@
             showToast(`Добро пожаловать, ${member.username} (${member.role})`);
         } else { document.getElementById("loginError").innerText = "Неверный логин или пароль"; }
     });
+    
     document.getElementById("logoutMainBtn")?.addEventListener("click",()=>{
         currentUser = null;
         document.getElementById("loginPage").style.display = "block";
         document.getElementById("mainApp").style.display = "none";
         showToast("Вы вышли");
     });
+    
     document.getElementById("hardResetBtn")?.addEventListener("click",()=>{
         if(confirm("Сбросить все данные?")) {
             gangMembers = [
@@ -829,17 +786,20 @@
                 { username: "Dunya", password: "DBG48148DDR", role: "Правая рука", isAdmin: true }
             ];
             obshak = 0; jobs = [{ title: "Охрана VIP", reward: 7500, desc: "Сопровождение груза" }, { title: "Крыша для бара", reward: 12000, desc: "Ежемесячная плата" }];
-            financeHistory = []; goodsCatalog = [{ name: "Glock-17", price: 15000, desc: "Пистолет" }, { name: "Бронежилет", price: 25000, desc: "Защита" }];
+            financeHistory = []; goodsCatalog = [{ name: "Glock-17", price: 15000, desc: "Пистолет" }, { name: "Бронежилет", price: 25000, desc: "Защита" }, { name: "Аптечка", price: 8500, desc: "Лечение" }, { name: "Глушитель", price: 12000, desc: "Снижает шум" }];
             posts = [];
             saveAll();
-            setTimeout(() => location.reload(), 1500);
+            location.reload();
         }
     });
+    
     const tabs = document.querySelectorAll('#mainApp .tab-btn');
     const panesMap = { dashboard:'dashboardPane', posts:'postsPane', jobs:'jobsPane', goods:'goodsPane', finance:'financePane', members:'membersPane' };
     tabs.forEach(btn => { btn.addEventListener('click',()=>{ let tab = btn.getAttribute('data-tab'); Object.values(panesMap).forEach(p => document.getElementById(p)?.classList.remove('active-pane')); if(panesMap[tab]) document.getElementById(panesMap[tab])?.classList.add('active-pane'); tabs.forEach(t=>t.classList.remove('active')); btn.classList.add('active'); }); });
-    function escapeHtml(str) { return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+    
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'>'); }
     document.querySelectorAll('[data-nav]').forEach(link => { link.addEventListener('click', (e) => { let s = e.target.getAttribute('data-nav'); if(s==='about') showToast('Darkside Crew — крышуем бизнес'); if(s==='contacts') showToast('Discord: discord.gg/tfJNMs3GBU'); if(s==='apply') showToast('Подать заявку лидеру Shcolar.'); }); });
+    
     refreshUI();
 </script>
 </body>
