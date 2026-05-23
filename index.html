@@ -11,13 +11,11 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #0a0c15;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
             color: #edf2ff;
         }
-
         .bg-glow {
             position: fixed;
             top: 0;
@@ -27,13 +25,11 @@
             background: radial-gradient(circle at 20% 30%, #0f172e, #03050b);
             z-index: -2;
         }
-
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 24px;
         }
-
         .header {
             display: flex;
             justify-content: space-between;
@@ -42,14 +38,12 @@
             padding: 24px 0 16px;
             border-bottom: 1px solid #2a2f4e;
         }
-
         .logo-area {
             display: flex;
             align-items: center;
             gap: 16px;
             flex-wrap: wrap;
         }
-
         .logo-img {
             width: 55px;
             height: 55px;
@@ -59,7 +53,6 @@
             padding: 4px;
             box-shadow: 0 0 8px rgba(123,78,255,0.4);
         }
-
         .logo h1 {
             font-size: 34px;
             font-weight: 800;
@@ -73,7 +66,6 @@
             font-size: 13px;
             color: #7e8bb8;
         }
-
         .nav-links {
             display: flex;
             gap: 28px;
@@ -304,16 +296,18 @@
         .change-pwd:hover {
             background: #3f4a7c;
         }
-        .disabled-input {
-            background: #1a1f30;
-            color: #8f9ed4;
-            cursor: not-allowed;
-        }
         .permission-info {
             font-size: 12px;
             color: #a5b2e8;
             margin-top: 8px;
             text-align: center;
+        }
+        .reset-btn {
+            background: #7a2e2e;
+            margin-top: 10px;
+        }
+        .reset-btn:hover {
+            background: #5e2020;
         }
     </style>
 </head>
@@ -335,19 +329,18 @@
         </div>
     </div>
 
-    <!-- СТРАНИЦА ВХОДА -->
     <div id="loginPage" style="display: block;">
         <div class="login-container">
             <h2>🔐 Вход в управление бандой</h2>
             <p>Только для членов Darkside Crew</p>
-            <input type="text" id="loginUsername" class="login-input" placeholder="Логин">
-            <input type="password" id="loginPassword" class="login-input" placeholder="Пароль">
+            <input type="text" id="loginUsername" class="login-input" placeholder="Логин" value="Shcolar">
+            <input type="password" id="loginPassword" class="login-input" placeholder="Пароль" value="111111228">
             <button class="login-btn" id="doLoginBtn">Войти</button>
             <div id="loginError" class="error-msg"></div>
+            <button class="btn reset-btn" id="hardResetBtn" style="margin-top: 20px; width: 100%;">⚠️ СБРОС ВСЕХ ДАННЫХ (только для лидера)</button>
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <div id="mainApp" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
             <div><span class="tag">👑 Текущий аккаунт: <span id="currentUserSpan"></span></span></div>
@@ -362,7 +355,6 @@
             <button class="tab-btn" data-tab="members">👥 Участники банды</button>
         </div>
 
-        <!-- ШТАБ -->
         <div id="dashboardPane" class="tab-pane active-pane">
             <div class="grid-2">
                 <div class="stat-card"><div class="tag">⭐ Влияние</div><div style="font-size: 32px;">8.4K</div><div>Рейтинг: ★★★★☆</div></div>
@@ -372,15 +364,11 @@
                 <img class="section-logo" src="https://raw.githubusercontent.com/MayorDd-gmod/Darkside-Crew-/main/%D0%90%D1%84%D1%80%D0%BE-%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%86%D1%8B%20%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF%20%D0%B1%D0%B0%D0%BD%D0%B4%D1%8B!-round.png">
                 <h3>🔮 Сводка Darkside Crew</h3>
                 <p>Банда занимается «легальными» бизнесами и крышует предпринимателей в Доброграде.</p>
-                <div style="margin-top: 20px;">
-                    <span class="tag">🔹 Лидер: Shcolar</span> 
-                    <span class="tag">🔹 Правая рука: Dunya</span>
-                </div>
+                <div style="margin-top: 20px;"><span class="tag">🔹 Лидер: Shcolar</span> <span class="tag">🔹 Правая рука: Dunya</span></div>
                 <a href="https://discord.gg/tfJNMs3GBU" target="_blank" class="discord-link">💬 Официальный Discord банды</a>
             </div>
         </div>
 
-        <!-- ДЕЛА / ЗАКАЗЫ (только админы могут создавать) -->
         <div id="jobsPane" class="tab-pane">
             <div class="card">
                 <h3>💰 Активные дела</h3>
@@ -395,7 +383,6 @@
             </div>
         </div>
 
-        <!-- КАТАЛОГ ТОВАРОВ (только админы могут добавлять) -->
         <div id="goodsPane" class="tab-pane">
             <div class="card">
                 <h3>📦 Каталог товаров</h3>
@@ -409,7 +396,6 @@
             </div>
         </div>
 
-        <!-- ФИНАНСЫ / ОБЩАК (только админы могут вносить/выдавать) -->
         <div id="financePane" class="tab-pane">
             <div class="card">
                 <h3>💰 Общак</h3>
@@ -424,7 +410,6 @@
             </div>
         </div>
 
-        <!-- УЧАСТНИКИ БАНДЫ (только админы могут добавлять/исключать/менять пароли) -->
         <div id="membersPane" class="tab-pane">
             <div class="card">
                 <h3>👥 Участники банды</h3>
@@ -455,21 +440,37 @@
 </div>
 
 <script>
-    // ======================== АККАУНТЫ ========================
-    let gangMembers = JSON.parse(localStorage.getItem("darkside_members_fixed")) || [
-        { username: "Shcolar", password: "111111228", role: "Лидер", isAdmin: true },
-        { username: "Dunya", password: "DBG48148DDR", role: "Правая рука", isAdmin: true }
-    ];
-    let currentUser = null;
+    // ======================== ПРИНУДИТЕЛЬНАЯ ИНИЦИАЛИЗАЦИЯ С НОВЫМИ ПАРОЛЯМИ ========================
+    let gangMembers = [];
+    try {
+        const stored = localStorage.getItem("darkside_members_final");
+        if (stored) {
+            gangMembers = JSON.parse(stored);
+        } else {
+            // Первый запуск: создаём аккаунты с новыми паролями
+            gangMembers = [
+                { username: "Shcolar", password: "111111228", role: "Лидер", isAdmin: true },
+                { username: "Dunya", password: "DBG48148DDR", role: "Правая рука", isAdmin: true }
+            ];
+            localStorage.setItem("darkside_members_final", JSON.stringify(gangMembers));
+        }
+        // Дополнительная проверка: если пароли не соответствуют новым — перезаписываем Shcolar и Dunya
+        const shcolar = gangMembers.find(m => m.username === "Shcolar");
+        const dunya = gangMembers.find(m => m.username === "Dunya");
+        let needUpdate = false;
+        if (shcolar && shcolar.password !== "111111228") { shcolar.password = "111111228"; needUpdate = true; }
+        if (dunya && dunya.password !== "DBG48148DDR") { dunya.password = "DBG48148DDR"; needUpdate = true; }
+        if (needUpdate) localStorage.setItem("darkside_members_final", JSON.stringify(gangMembers));
+    } catch(e) { console.warn(e); }
 
-    // ======================== ДАННЫЕ БАНДЫ ========================
-    let obshak = parseInt(localStorage.getItem("darkside_obshak_fixed")) || 0;
-    let jobs = JSON.parse(localStorage.getItem("darkside_jobs_fixed")) || [
+    let currentUser = null;
+    let obshak = parseInt(localStorage.getItem("darkside_obshak_final")) || 0;
+    let jobs = JSON.parse(localStorage.getItem("darkside_jobs_final")) || [
         { title: "Охрана VIP", reward: 7500, desc: "Сопровождение груза" },
         { title: "Крыша для бара", reward: 12000, desc: "Ежемесячная плата" }
     ];
-    let financeHistory = JSON.parse(localStorage.getItem("darkside_finlog_fixed")) || [];
-    let goodsCatalog = JSON.parse(localStorage.getItem("darkside_goods_fixed")) || [
+    let financeHistory = JSON.parse(localStorage.getItem("darkside_finlog_final")) || [];
+    let goodsCatalog = JSON.parse(localStorage.getItem("darkside_goods_final")) || [
         { name: "Glock-17", price: 15000 }, { name: "Бронежилет", price: 25000 },
         { name: "Аптечка", price: 8500 }, { name: "Глушитель", price: 12000 }
     ];
@@ -478,66 +479,36 @@
     let depositCooldown = false;
 
     function showToast(msg) { let t=document.createElement("div"); t.className="toast"; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
-    
     function saveAll() {
-        localStorage.setItem("darkside_members_fixed", JSON.stringify(gangMembers));
-        localStorage.setItem("darkside_obshak_fixed", obshak);
-        localStorage.setItem("darkside_jobs_fixed", JSON.stringify(jobs));
-        localStorage.setItem("darkside_finlog_fixed", JSON.stringify(financeHistory));
-        localStorage.setItem("darkside_goods_fixed", JSON.stringify(goodsCatalog));
+        localStorage.setItem("darkside_members_final", JSON.stringify(gangMembers));
+        localStorage.setItem("darkside_obshak_final", obshak);
+        localStorage.setItem("darkside_jobs_final", JSON.stringify(jobs));
+        localStorage.setItem("darkside_finlog_final", JSON.stringify(financeHistory));
+        localStorage.setItem("darkside_goods_final", JSON.stringify(goodsCatalog));
         refreshUI();
     }
 
-    async function sendDiscordNotification(jobTitle, reward, desc) {
-        try { await fetch(DISCORD_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: `🔫 НОВЫЙ ЗАКАЗ: ${jobTitle}\n💰 Награда: ${reward}\n📝 ${desc}` }) }); } catch(e) {}
-    }
-    async function sendGoodsNotification(name, price) {
-        try { await fetch(DISCORD_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: `📦 НОВЫЙ ТОВАР: ${name} | Цена: ${price} RUB` }) }); } catch(e) {}
-    }
-
     function isAdmin() { return currentUser && currentUser.isAdmin === true; }
-
     function updatePermissionsUI() {
         const admin = isAdmin();
-        const jobTitleInput = document.getElementById("jobTitle");
-        const jobRewardInput = document.getElementById("jobRewardInput");
-        const jobDescInput = document.getElementById("jobDesc");
-        const createJobBtn = document.getElementById("createJobBtn");
-        const jobsPermInfo = document.getElementById("jobsPermissionInfo");
-        if (jobTitleInput) jobTitleInput.disabled = !admin;
-        if (jobRewardInput) jobRewardInput.disabled = !admin;
-        if (jobDescInput) jobDescInput.disabled = !admin;
-        if (createJobBtn) createJobBtn.disabled = !admin;
-        if (jobsPermInfo) jobsPermInfo.innerHTML = admin ? "✅ У вас есть права на создание заказов" : "⛔ Только лидер или правая рука могут создавать заказы";
-
-        const goodNameInput = document.getElementById("goodName");
-        const goodPriceInput = document.getElementById("goodPrice");
-        const addGoodBtn = document.getElementById("addGoodBtn");
-        const goodsPermInfo = document.getElementById("goodsPermissionInfo");
-        if (goodNameInput) goodNameInput.disabled = !admin;
-        if (goodPriceInput) goodPriceInput.disabled = !admin;
-        if (addGoodBtn) addGoodBtn.disabled = !admin;
-        if (goodsPermInfo) goodsPermInfo.innerHTML = admin ? "✅ У вас есть права на добавление товаров" : "⛔ Только лидер или правая рука могут добавлять товары";
-
-        const depositSumInput = document.getElementById("depositSum");
-        const depositBtn = document.getElementById("depositBtn");
-        const withdrawBtn = document.getElementById("withdrawBtn");
-        const financePermInfo = document.getElementById("financePermissionInfo");
-        if (depositSumInput) depositSumInput.disabled = !admin;
-        if (depositBtn) depositBtn.disabled = !admin;
-        if (withdrawBtn) withdrawBtn.disabled = !admin;
-        if (financePermInfo) financePermInfo.innerHTML = admin ? "✅ У вас есть права на управление общаком" : "⛔ Только лидер или правая рука могут изменять баланс общака";
-
-        const newMemberNameInput = document.getElementById("newMemberName");
-        const newMemberRoleSelect = document.getElementById("newMemberRole");
-        const newMemberPassInput = document.getElementById("newMemberPass");
-        const addMemberBtn = document.getElementById("addMemberBtn");
-        const membersPermInfo = document.getElementById("membersPermissionInfo");
-        if (newMemberNameInput) newMemberNameInput.disabled = !admin;
-        if (newMemberRoleSelect) newMemberRoleSelect.disabled = !admin;
-        if (newMemberPassInput) newMemberPassInput.disabled = !admin;
-        if (addMemberBtn) addMemberBtn.disabled = !admin;
-        if (membersPermInfo) membersPermInfo.innerHTML = admin ? "✅ У вас есть права на управление составом банды" : "⛔ Только лидер или правая рука могут изменять состав банды";
+        const fields = [
+            { id: "jobTitle", disable: !admin }, { id: "jobRewardInput", disable: !admin },
+            { id: "jobDesc", disable: !admin }, { id: "createJobBtn", disable: !admin },
+            { id: "goodName", disable: !admin }, { id: "goodPrice", disable: !admin },
+            { id: "addGoodBtn", disable: !admin }, { id: "depositSum", disable: !admin },
+            { id: "depositBtn", disable: !admin }, { id: "withdrawBtn", disable: !admin },
+            { id: "newMemberName", disable: !admin }, { id: "newMemberRole", disable: !admin },
+            { id: "newMemberPass", disable: !admin }, { id: "addMemberBtn", disable: !admin }
+        ];
+        fields.forEach(f => { let el = document.getElementById(f.id); if(el) el.disabled = f.disable; });
+        const jobsInfo = document.getElementById("jobsPermissionInfo");
+        if(jobsInfo) jobsInfo.innerHTML = admin ? "✅ У вас есть права" : "⛔ Только лидер или правая рука";
+        const goodsInfo = document.getElementById("goodsPermissionInfo");
+        if(goodsInfo) goodsInfo.innerHTML = admin ? "✅ У вас есть права" : "⛔ Только лидер или правая рука";
+        const financeInfo = document.getElementById("financePermissionInfo");
+        if(financeInfo) financeInfo.innerHTML = admin ? "✅ У вас есть права" : "⛔ Только лидер или правая рука";
+        const membersInfo = document.getElementById("membersPermissionInfo");
+        if(membersInfo) membersInfo.innerHTML = admin ? "✅ У вас есть права" : "⛔ Только лидер или правая рука";
     }
 
     function refreshUI() {
@@ -545,7 +516,6 @@
         document.getElementById("obshakBalance").innerText = obshak.toLocaleString();
         document.getElementById("obshakBalanceLarge").innerText = obshak.toLocaleString();
         document.getElementById("currentUserSpan").innerHTML = `${currentUser.username} <span class="role-badge">${currentUser.role}</span>`;
-
         const jobsDiv = document.getElementById("jobsList");
         if(jobsDiv) {
             jobsDiv.innerHTML = "";
@@ -561,7 +531,6 @@
         }
         const logDiv = document.getElementById("financeLog");
         if(logDiv) logDiv.innerHTML = financeHistory.slice(-6).reverse().map(h => `<div>🔹 ${h}</div>`).join('') || "<div>Нет операций</div>";
-        
         const membersDiv = document.getElementById("membersList");
         if(membersDiv) {
             membersDiv.innerHTML = "";
@@ -570,10 +539,7 @@
                 let canManage = isAdmin();
                 membersDiv.innerHTML += `
                     <div class="member-item">
-                        <div>
-                            <strong>${escapeHtml(m.username)}</strong> ${adminBadge}<br>
-                            <span class="tag">${m.role}</span>
-                        </div>
+                        <div><strong>${escapeHtml(m.username)}</strong> ${adminBadge}<br><span class="tag">${m.role}</span></div>
                         <div style="display: flex; gap: 8px;">
                             ${canManage ? `<button class="change-pwd" onclick="showChangePasswordFor('${escapeHtml(m.username)}')">🔐 Сменить пароль</button>` : ''}
                             ${canManage ? `<button class="btn btn-outline" onclick="removeMember(${idx})">❌ Исключить</button>` : ''}
@@ -585,7 +551,6 @@
         updatePermissionsUI();
     }
 
-    // Смена пароля (только для админов)
     window.showChangePasswordFor = function(username) {
         if (!isAdmin()) { showToast("Недостаточно прав"); return; }
         let newPassword = prompt(`Введите новый пароль для участника ${username}:`);
@@ -595,19 +560,11 @@
                 member.password = newPassword.trim();
                 saveAll();
                 showToast(`Пароль для ${username} успешно изменён!`);
-                // Если пароль меняют текущему пользователю — обновляем currentUser
-                if (currentUser && currentUser.username === username) {
-                    currentUser.password = newPassword.trim();
-                }
-            } else {
-                showToast("Участник не найден");
-            }
-        } else if (newPassword !== null) {
-            showToast("Пароль не может быть пустым");
-        }
+                if (currentUser && currentUser.username === username) currentUser.password = newPassword.trim();
+            } else showToast("Участник не найден");
+        } else if (newPassword !== null) showToast("Пароль не может быть пустым");
     };
 
-    // Смена собственного пароля
     document.getElementById("changeOwnPasswordBtn")?.addEventListener("click", () => {
         if (!currentUser) return;
         let newPassword = prompt(`Введите новый пароль для вашего аккаунта (${currentUser.username}):`);
@@ -617,13 +574,9 @@
                 member.password = newPassword.trim();
                 currentUser.password = newPassword.trim();
                 saveAll();
-                showToast("Ваш пароль успешно изменён! Используйте его при следующем входе.");
-            } else {
-                showToast("Ошибка: аккаунт не найден");
-            }
-        } else if (newPassword !== null) {
-            showToast("Пароль не может быть пустым");
-        }
+                showToast("Ваш пароль успешно изменён!");
+            } else showToast("Ошибка: аккаунт не найден");
+        } else if (newPassword !== null) showToast("Пароль не может быть пустым");
     });
 
     window.completeJob = function(idx) {
@@ -646,7 +599,7 @@
         saveAll();
         document.getElementById("jobTitle").value=""; document.getElementById("jobRewardInput").value=""; document.getElementById("jobDesc").value="";
         showToast(`Дело "${title}" создано`);
-        await sendDiscordNotification(title, rewardShow, desc);
+        try { await fetch(DISCORD_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: `🔫 НОВЫЙ ЗАКАЗ: ${title}\n💰 Награда: ${rewardShow}\n📝 ${desc}` }) }); } catch(e) {}
     });
     document.getElementById("addGoodBtn")?.addEventListener("click", async () => {
         if (!isAdmin()) { showToast("Недостаточно прав"); return; }
@@ -657,7 +610,7 @@
         saveAll();
         document.getElementById("goodName").value=""; document.getElementById("goodPrice").value="";
         showToast(`Товар "${name}" добавлен`);
-        await sendGoodsNotification(name, price);
+        try { await fetch(DISCORD_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: `📦 НОВЫЙ ТОВАР: ${name} | Цена: ${price} RUB` }) }); } catch(e) {}
     });
     document.getElementById("depositBtn")?.addEventListener("click",()=>{
         if (!isAdmin()) { showToast("Недостаточно прав"); return; }
@@ -677,9 +630,8 @@
         saveAll(); showToast(`Выдано ${sum} RUB`);
     });
 
-    function isCurrentAdmin() { return currentUser && currentUser.isAdmin === true; }
     document.getElementById("addMemberBtn")?.addEventListener("click",()=>{
-        if(!isCurrentAdmin()) { showToast("Только лидер или правая рука могут добавлять"); return; }
+        if(!isAdmin()) { showToast("Только лидер или правая рука могут добавлять"); return; }
         let name = document.getElementById("newMemberName").value.trim();
         let role = document.getElementById("newMemberRole").value;
         let pass = document.getElementById("newMemberPass").value.trim();
@@ -692,7 +644,7 @@
         showToast(`${name} принят в банду (${role})!`);
     });
     window.removeMember = function(idx) {
-        if(!isCurrentAdmin()) { showToast("Недостаточно прав"); return; }
+        if(!isAdmin()) { showToast("Недостаточно прав"); return; }
         let removed = gangMembers[idx];
         if(removed.isAdmin && currentUser.username !== "Shcolar") { showToast("Только лидер может исключить другого админа"); return; }
         gangMembers.splice(idx,1);
@@ -718,6 +670,28 @@
         document.getElementById("mainApp").style.display = "none";
         document.getElementById("loginError").innerText = "";
         showToast("Вы вышли");
+    });
+
+    document.getElementById("hardResetBtn")?.addEventListener("click",()=>{
+        if(confirm("ВНИМАНИЕ! Это удалит всех участников и сбросит все данные. Продолжить?")) {
+            gangMembers = [
+                { username: "Shcolar", password: "111111228", role: "Лидер", isAdmin: true },
+                { username: "Dunya", password: "DBG48148DDR", role: "Правая рука", isAdmin: true }
+            ];
+            obshak = 0;
+            jobs = [
+                { title: "Охрана VIP", reward: 7500, desc: "Сопровождение груза" },
+                { title: "Крыша для бара", reward: 12000, desc: "Ежемесячная плата" }
+            ];
+            financeHistory = [];
+            goodsCatalog = [
+                { name: "Glock-17", price: 15000 }, { name: "Бронежилет", price: 25000 },
+                { name: "Аптечка", price: 8500 }, { name: "Глушитель", price: 12000 }
+            ];
+            saveAll();
+            showToast("Все данные сброшены! Обновите страницу.");
+            setTimeout(() => location.reload(), 1500);
+        }
     });
 
     const tabs = document.querySelectorAll('#mainApp .tab-btn');
