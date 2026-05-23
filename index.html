@@ -455,21 +455,21 @@
 </div>
 
 <script>
-    // ======================== АККАУНТЫ С НОВЫМИ ПАРОЛЯМИ ========================
-    let gangMembers = JSON.parse(localStorage.getItem("darkside_members_v5")) || [
+    // ======================== АККАУНТЫ ========================
+    let gangMembers = JSON.parse(localStorage.getItem("darkside_members_fixed")) || [
         { username: "Shcolar", password: "111111228", role: "Лидер", isAdmin: true },
         { username: "Dunya", password: "DBG48148DDR", role: "Правая рука", isAdmin: true }
     ];
     let currentUser = null;
 
     // ======================== ДАННЫЕ БАНДЫ ========================
-    let obshak = parseInt(localStorage.getItem("darkside_obshak")) || 0;
-    let jobs = JSON.parse(localStorage.getItem("darkside_jobs")) || [
+    let obshak = parseInt(localStorage.getItem("darkside_obshak_fixed")) || 0;
+    let jobs = JSON.parse(localStorage.getItem("darkside_jobs_fixed")) || [
         { title: "Охрана VIP", reward: 7500, desc: "Сопровождение груза" },
         { title: "Крыша для бара", reward: 12000, desc: "Ежемесячная плата" }
     ];
-    let financeHistory = JSON.parse(localStorage.getItem("darkside_finlog")) || [];
-    let goodsCatalog = JSON.parse(localStorage.getItem("darkside_goods")) || [
+    let financeHistory = JSON.parse(localStorage.getItem("darkside_finlog_fixed")) || [];
+    let goodsCatalog = JSON.parse(localStorage.getItem("darkside_goods_fixed")) || [
         { name: "Glock-17", price: 15000 }, { name: "Бронежилет", price: 25000 },
         { name: "Аптечка", price: 8500 }, { name: "Глушитель", price: 12000 }
     ];
@@ -478,12 +478,13 @@
     let depositCooldown = false;
 
     function showToast(msg) { let t=document.createElement("div"); t.className="toast"; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+    
     function saveAll() {
-        localStorage.setItem("darkside_members_v5", JSON.stringify(gangMembers));
-        localStorage.setItem("darkside_obshak", obshak);
-        localStorage.setItem("darkside_jobs", JSON.stringify(jobs));
-        localStorage.setItem("darkside_finlog", JSON.stringify(financeHistory));
-        localStorage.setItem("darkside_goods", JSON.stringify(goodsCatalog));
+        localStorage.setItem("darkside_members_fixed", JSON.stringify(gangMembers));
+        localStorage.setItem("darkside_obshak_fixed", obshak);
+        localStorage.setItem("darkside_jobs_fixed", JSON.stringify(jobs));
+        localStorage.setItem("darkside_finlog_fixed", JSON.stringify(financeHistory));
+        localStorage.setItem("darkside_goods_fixed", JSON.stringify(goodsCatalog));
         refreshUI();
     }
 
@@ -498,7 +499,6 @@
 
     function updatePermissionsUI() {
         const admin = isAdmin();
-        // Дела / Заказы
         const jobTitleInput = document.getElementById("jobTitle");
         const jobRewardInput = document.getElementById("jobRewardInput");
         const jobDescInput = document.getElementById("jobDesc");
@@ -510,7 +510,6 @@
         if (createJobBtn) createJobBtn.disabled = !admin;
         if (jobsPermInfo) jobsPermInfo.innerHTML = admin ? "✅ У вас есть права на создание заказов" : "⛔ Только лидер или правая рука могут создавать заказы";
 
-        // Каталог товаров
         const goodNameInput = document.getElementById("goodName");
         const goodPriceInput = document.getElementById("goodPrice");
         const addGoodBtn = document.getElementById("addGoodBtn");
@@ -520,7 +519,6 @@
         if (addGoodBtn) addGoodBtn.disabled = !admin;
         if (goodsPermInfo) goodsPermInfo.innerHTML = admin ? "✅ У вас есть права на добавление товаров" : "⛔ Только лидер или правая рука могут добавлять товары";
 
-        // Финансы / Общак
         const depositSumInput = document.getElementById("depositSum");
         const depositBtn = document.getElementById("depositBtn");
         const withdrawBtn = document.getElementById("withdrawBtn");
@@ -530,7 +528,6 @@
         if (withdrawBtn) withdrawBtn.disabled = !admin;
         if (financePermInfo) financePermInfo.innerHTML = admin ? "✅ У вас есть права на управление общаком" : "⛔ Только лидер или правая рука могут изменять баланс общака";
 
-        // Участники (добавление)
         const newMemberNameInput = document.getElementById("newMemberName");
         const newMemberRoleSelect = document.getElementById("newMemberRole");
         const newMemberPassInput = document.getElementById("newMemberPass");
@@ -588,6 +585,7 @@
         updatePermissionsUI();
     }
 
+    // Смена пароля (только для админов)
     window.showChangePasswordFor = function(username) {
         if (!isAdmin()) { showToast("Недостаточно прав"); return; }
         let newPassword = prompt(`Введите новый пароль для участника ${username}:`);
@@ -597,6 +595,7 @@
                 member.password = newPassword.trim();
                 saveAll();
                 showToast(`Пароль для ${username} успешно изменён!`);
+                // Если пароль меняют текущему пользователю — обновляем currentUser
                 if (currentUser && currentUser.username === username) {
                     currentUser.password = newPassword.trim();
                 }
@@ -608,6 +607,7 @@
         }
     };
 
+    // Смена собственного пароля
     document.getElementById("changeOwnPasswordBtn")?.addEventListener("click", () => {
         if (!currentUser) return;
         let newPassword = prompt(`Введите новый пароль для вашего аккаунта (${currentUser.username}):`);
@@ -617,7 +617,7 @@
                 member.password = newPassword.trim();
                 currentUser.password = newPassword.trim();
                 saveAll();
-                showToast("Ваш пароль успешно изменён!");
+                showToast("Ваш пароль успешно изменён! Используйте его при следующем входе.");
             } else {
                 showToast("Ошибка: аккаунт не найден");
             }
@@ -705,7 +705,7 @@
         let pass = document.getElementById("loginPassword").value;
         let member = gangMembers.find(m=>m.username===user && m.password===pass);
         if(member) {
-            currentUser = member;
+            currentUser = { ...member };
             document.getElementById("loginPage").style.display = "none";
             document.getElementById("mainApp").style.display = "block";
             refreshUI();
