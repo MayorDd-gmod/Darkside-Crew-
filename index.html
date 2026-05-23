@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Darkside Crew | Банда Доброграда</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0c15;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            color: #edf2ff;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, #0f172e, #03050b);
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 24px 0 16px;
+            border-bottom: 1px solid #2a2f4e;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo-img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #11172b;
+            padding: 4px;
+            box-shadow: 0 0 8px rgba(123,78,255,0.4);
+        }
+
+        .logo h1 {
+            font-size: 34px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #8a6eff, #ff3c7e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .logo p {
+            font-size: 13px;
+            color: #7e8bb8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #cbd5ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .nav-links a:hover { color: white; text-shadow: 0 0 4px #7b4eff; }
+
+        .tabs {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 32px 0 20px;
+            border-bottom: 1px solid #232842;
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #a5b2e8;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 8px 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+        }
+        .tab-btn.active {
+            color: white;
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #7b4eff, #ff3c7e);
+            border-radius: 3px;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fade 0.3s ease;
+        }
+        .tab-pane.active-pane {
+            display: block;
+        }
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+        .card {
+            background: #11172bdd;
+            backdrop-filter: blur(2px);
+            border-radius: 28px;
+            border: 1px solid #2f3a6b;
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .stat-card {
+            background: #0f162ddd;
+            border-radius: 20px;
+            padding: 20px;
+            border-left: 4px solid #7b4eff;
+        }
+        .btn {
+            background: #262e55;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+        .btn-primary {
+            background: linear-gradient(95deg, #7b4eff, #b146ff);
+            box-shadow: 0 4px 12px rgba(123,78,255,0.3);
+        }
+        .btn-primary:hover { transform: scale(0.97); background: #623bdd; }
+        .btn-outline { background: transparent; border: 1px solid #5e6da8; }
+        input, textarea, select {
+            background: #0c1126;
+            border: 1px solid #2a3460;
+            padding: 10px 16px;
+            border-radius: 40px;
+            color: white;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        .tag {
+            background: #7b4eff33;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+        }
+        .footer { text-align: center; padding: 32px 0 24px; color: #5d6b9e; font-size: 13px; }
+        .toast {
+            position: fixed; bottom: 30px; right: 20px; background: #1e2748; padding: 12px 20px; border-radius: 40px;
+            border-left: 4px solid #5eff8e; z-index: 1200; animation: fadeOut 2.5s forwards;
+        }
+        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        hr { border-color: #2f3a66; margin: 16px 0; }
+        .job-item {
+            background:#0f1629; border-radius:20px; padding:14px; margin-bottom:12px;
+        }
+        .cd-disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        .goods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .good-card {
+            background: #0f162ddd;
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            border-left: 3px solid #7b4eff;
+        }
+        .good-card h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .good-price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e2a526;
+            margin: 10px 0;
+        }
+        .discord-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #5865f2;
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            margin-top: 15px;
+        }
+        .discord-link:hover {
+            background: #4752c4;
+            transform: scale(1.02);
+        }
+        .section-logo {
+            display: block;
+            margin: 0 auto 16px auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #7b4eff;
+            background: #0a0f1c;
+            padding: 4px;
+        }
+        .footer-sign {
+            margin-top: 6px;
+            font-size: 11px;
+            opacity: 0.6;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="container">
+    <div class="header">
+        <div class="logo-area">
+            <!-- Логотип (как на картинке) -->
+            <img class="logo-img" src="https://raw.githubusercontent.com/MayorDd-gmod/Darkside-Crew-/main/%D0%90%D1%84%D1%80%D0%BE-%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%86%D1%8B%20%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF%20%D0%B1%D0%B0%D0%BD%D0%B4%D1%8B!-round.png" alt="Darkside Crew Logo">
+            <div class="logo">
+                <h1>◈ DARKSiDE CREW ◈</h1>
+                <p>банда Доброграда | криминал по лицензии</p>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a data-nav="about">О банде</a>
+            <a data-nav="contacts">Контакты</a>
+            <a data-nav="apply">Вступить</a>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="dashboard">🏠 Штаб</button>
+        <button class="tab-btn" data-tab="jobs">💰 Дела / Заказы</button>
+        <button class="tab-btn" data-tab="goods">📦 Каталог товаров</button>
+        <button class="tab-btn" data-tab="finance">📦 Общак & Финансы</button>
+    </div>
+
+    <!-- ШТАБ -->
+    <div id="dashboardPane" class="tab-pane active-pane">
+        <div class="grid-2">
+            <div class="stat-card"><div class="tag">⭐ Влияние</div><div style="font-size: 32px; font-weight:800;">8.4K</div><div>Рейтинг: ★★★★☆</div></div>
+            <div class="stat-card"><div class="tag">💰 Общак</div><div style="font-size: 32px;" id="obshakBalance">0</div><div>RUB</div></div>
+        </div>
+        <div class="card">
+            <img class="section-logo" src="https://raw.githubusercontent.com/MayorDd-gmod/Darkside-Crew-/main/%D0%90%D1%84%D1%80%D0%BE-%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%86%D1%8B%20%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF%20%D0%B1%D0%B0%D0%BD%D0%B4%D1%8B!-round.png" alt="Darkside Crew Logo">
+            <h3>🔮 Сводка Darkside Crew</h3>
+            <p>Банда занимается «легальными» бизнесами и крышует предпринимателей в Доброграде. Полный контроль, защита и решение любых вопросов за долю.</p>
+            <div style="margin-top: 20px;">
+                <span class="tag">🔹 Статус: активна</span> 
+                <span class="tag">🔹 Лидер: shcolar</span> 
+                <span class="tag">🔹 Сделок за неделю: 14</span>
+            </div>
+            <div style="margin-top: 25px;">
+                <a href="https://discord.gg/tfJNMs3GBU" target="_blank" class="discord-link">
+                    💬 Официальный Discord банды
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ДЕЛА / ЗАКАЗЫ -->
+    <div id="jobsPane" class="tab-pane">
+        <div class="card">
+            <h3>💰 Активные дела (контракты)</h3>
+            <div id="jobsList"></div>
+            <hr>
+            <h4>➕ Новый заказ</h4>
+            <input type="text" id="jobTitle" placeholder="Название дела">
+            <input type="text" id="jobRewardInput" placeholder="Награда (RUB, можно прочерк '-')">
+            <textarea id="jobDesc" rows="2" placeholder="Описание"></textarea>
+            <button class="btn btn-primary" id="createJobBtn">🔨 Создать заказ</button>
+        </div>
+    </div>
+
+    <!-- КАТАЛОГ ТОВАРОВ -->
+    <div id="goodsPane" class="tab-pane">
+        <div class="card">
+            <h3>📦 Каталог активных товаров / оружие / амуниция</h3>
+            <div class="goods-grid" id="goodsContainer"></div>
+            <hr>
+            <h4>➕ Добавить товар в каталог</h4>
+            <input type="text" id="goodName" placeholder="Название товара">
+            <input type="number" id="goodPrice" placeholder="Цена (RUB)">
+            <button class="btn btn-primary" id="addGoodBtn">➕ Добавить товар</button>
+        </div>
+    </div>
+
+    <!-- ФИНАНСЫ / ОБЩАК -->
+    <div id="financePane" class="tab-pane">
+        <div class="card">
+            <h3>💰 Банковский общак</h3>
+            <div style="font-size: 40px; font-weight:800;" id="obshakBalanceLarge">0</div>
+            <div style="display: flex; gap: 16px; margin: 24px 0;">
+                <input type="number" id="depositSum" placeholder="Сумма (не ограничена)">
+                <button class="btn btn-primary" id="depositBtn">💸 Внести в общак</button>
+                <button class="btn btn-outline" id="withdrawBtn">🏧 Выдать на дело</button>
+            </div>
+            <div id="financeLog" style="background:#0b1022; border-radius: 20px; padding: 12px;"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>© Darkside Crew | банда Доброграда</div>
+        <div class="footer-sign">© Hosan amana</div>
+    </div>
+</div>
+
+<script>
+    // ----- ВЕБХУК DISCORD (без упоминания лидера) -----
+    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1507608110792183859/MhNRYv5SWCtZ6D35qfL_EBFoaewKob--uXHnnBLpCs1SS1A9C3Rqq11PAfKP9bO6JdkR";
+
+    // ----- ДАННЫЕ -----
+    let obshak = parseInt(localStorage.getItem("darkside_obshak")) || 0;
+    let jobs = JSON.parse(localStorage.getItem("darkside_jobs")) || [
+        { title: "Охрана VIP", reward: 7500, desc: "Сопровождение груза", status: "active" },
+        { title: "Крыша для бара", reward: 12000, desc: "Ежемесячная плата за защиту", status: "active" }
+    ];
+    let financeHistory = JSON.parse(localStorage.getItem("darkside_finlog")) || [];
+    
+    let goodsCatalog = JSON.parse(localStorage.getItem("darkside_goods")) || [
+        { name: "Glock-17", price: 15000 },
+        { name: "Бронежилет 3 класс", price: 25000 },
+        { name: "Тактическая аптечка", price: 8500 },
+        { name: "Глушитель", price: 12000 },
+        { name: "Рация Motorola", price: 7000 }
+    ];
+
+    let depositCooldown = false;
+
+    function showToast(msg) { let t=document.createElement("div"); t.className="toast"; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+    
+    function saveAll() {
+        localStorage.setItem("darkside_obshak", obshak);
+        localStorage.setItem("darkside_jobs", JSON.stringify(jobs));
+        localStorage.setItem("darkside_finlog", JSON.stringify(financeHistory));
+        localStorage.setItem("darkside_goods", JSON.stringify(goodsCatalog));
+        refreshUI();
+    }
+
+    async function sendDiscordNotification(jobTitle, jobRewardDisplay, jobDesc) {
+        const embed = {
+            title: "🔫 НОВЫЙ ЗАКАЗ В БАНДЕ",
+            description: `**${jobTitle}**\n${jobDesc}`,
+            color: 0x7b4eff,
+            fields: [
+                { name: "💰 Награда", value: jobRewardDisplay, inline: true },
+                { name: "📅 Время", value: new Date().toLocaleString(), inline: false }
+            ],
+            footer: { text: "Darkside Crew • Ожидает исполнителей" }
+        };
+        try {
+            await fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ embeds: [embed] })
+            });
+            showToast("📢 Заказ продублирован в Discord");
+        } catch(e) { console.warn("webhook error", e); }
+    }
+
+    async function sendGoodsNotification(goodName, goodPrice) {
+        const embed = {
+            title: "📦 НОВЫЙ ТОВАР В КАТАЛОГЕ БАНДЫ",
+            description: `**${goodName}**`,
+            color: 0xe2a526,
+            fields: [
+                { name: "💰 Цена", value: `${goodPrice} RUB`, inline: true },
+                { name: "📅 Время добавления", value: new Date().toLocaleString(), inline: false }
+            ],
+            footer: { text: "Darkside Crew • Каталог обновлён" }
+        };
+        try {
+            await fetch(DISCORD_WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ embeds: [embed] })
+            });
+            showToast("📢 Товар продублирован в Discord");
+        } catch(e) { console.warn("webhook error", e); }
+    }
+
+    function refreshUI() {
+        const balanceElements = ["obshakBalance", "obshakBalanceLarge"];
+        balanceElements.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.innerText = obshak.toLocaleString();
+        });
+        
+        const jobsContainer = document.getElementById("jobsList");
+        if(jobsContainer) {
+            jobsContainer.innerHTML = "";
+            jobs.forEach((job, i) => {
+                let div = document.createElement("div");
+                div.className = "job-item";
+                let rewardDisplay = (job.reward === null || job.reward === undefined || job.reward === '') ? '—' : `${job.reward} RUB`;
+                div.innerHTML = `
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>📌 ${escapeHtml(job.title)}</strong> 
+                        <span class="tag">${rewardDisplay}</span>
+                    </div>
+                    <div style="font-size:13px; margin:8px 0;">${escapeHtml(job.desc)}</div>
+                    ${job.reward !== null && job.reward !== '' && typeof job.reward === 'number' ? `<button class="btn btn-outline" onclick="completeJob(${i})">✅ Выполнить (+${job.reward} в общак)</button>` : '<span class="tag">❗ Без награды (только для галочки)</span>'}
+                `;
+                jobsContainer.appendChild(div);
+            });
+            if(jobs.length === 0) jobsContainer.innerHTML = "<div class='job-item'>Нет активных дел. Создайте новый заказ.</div>";
+        }
+        
+        const goodsContainer = document.getElementById("goodsContainer");
+        if(goodsContainer) {
+            goodsContainer.innerHTML = "";
+            goodsCatalog.forEach((good, idx) => {
+                let card = document.createElement("div");
+                card.className = "good-card";
+                card.innerHTML = `
+                    <h4>🔹 ${escapeHtml(good.name)}</h4>
+                    <div class="good-price">${good.price} RUB</div>
+                    <button class="btn btn-outline" onclick="removeGood(${idx})">🗑️ Удалить</button>
+                `;
+                goodsContainer.appendChild(card);
+            });
+            if(goodsCatalog.length === 0) goodsContainer.innerHTML = "<div class='good-card'>Каталог пуст. Добавьте товары.</div>";
+        }
+        
+        const logDiv = document.getElementById("financeLog");
+        if(logDiv) {
+            logDiv.innerHTML = financeHistory.slice(-8).reverse().map(h => `<div>🔹 ${escapeHtml(h)}</div>`).join('');
+            if(financeHistory.length===0) logDiv.innerHTML = "<div>Нет операций по общаку</div>";
+        }
+    }
+
+    function escapeHtml(str) { 
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function setCooldown(buttonId, seconds) {
+        const btn = document.getElementById(buttonId);
+        if (!btn) return;
+        btn.disabled = true;
+        btn.classList.add('cd-disabled');
+        let timeLeft = seconds;
+        const originalText = btn.innerText;
+        btn.innerText = `⏳ ${timeLeft}с...`;
+        const interval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) btn.innerText = `⏳ ${timeLeft}с...`;
+            if (timeLeft < 0) {
+                clearInterval(interval);
+                btn.disabled = false;
+                btn.classList.remove('cd-disabled');
+                btn.innerText = originalText;
+            }
+        }, 1000);
+    }
+
+    window.completeJob = function(index) {
+        let job = jobs[index];
+        if(!job) return;
+        if (typeof job.reward === 'number') {
+            obshak += job.reward;
+            financeHistory.unshift(`✅ Выполнено дело "${job.title}" +${job.reward} RUB в общак`);
+            showToast(`Дело выполнено! +${job.reward} RUB в общак`);
+        } else {
+            financeHistory.unshift(`✅ Выполнено дело "${job.title}" (без награды)`);
+            showToast(`Дело "${job.title}" отмечено выполненным (награды нет)`);
+        }
+        jobs.splice(index,1);
+        saveAll();
+    };
+
+    document.getElementById("createJobBtn")?.addEventListener("click", async () => {
+        let title = document.getElementById("jobTitle").value.trim();
+        let rewardRaw = document.getElementById("jobRewardInput").value.trim();
+        let desc = document.getElementById("jobDesc").value.trim();
+        if(!title) { showToast("Введите название дела"); return; }
+        
+        let rewardValue = null;
+        let rewardDisplayForDiscord = "—";
+        
+        if (rewardRaw === "" || rewardRaw === "-" || rewardRaw.toLowerCase() === "прочерк") {
+            rewardValue = null;
+            rewardDisplayForDiscord = "— (без награды)";
+        } else {
+            let parsed = parseFloat(rewardRaw);
+            if (isNaN(parsed) || parsed < 0) {
+                showToast("Награда должна быть числом >=0 либо прочерком '-'");
+                return;
+            }
+            rewardValue = parsed;
+            rewardDisplayForDiscord = `${rewardValue} RUB`;
+        }
+        
+        let finalDesc = desc || "Банда ждёт исполнителей";
+        jobs.push({ title: title, reward: rewardValue, desc: finalDesc, status:"active" });
+        saveAll();
+        document.getElementById("jobTitle").value="";
+        document.getElementById("jobRewardInput").value="";
+        document.getElementById("jobDesc").value="";
+        showToast(`Дело "${title}" добавлено`);
+        await sendDiscordNotification(title, rewardDisplayForDiscord, finalDesc);
+    });
+
+    document.getElementById("addGoodBtn")?.addEventListener("click", async () => {
+        let name = document.getElementById("goodName").value.trim();
+        let price = parseFloat(document.getElementById("goodPrice").value);
+        if(!name) { showToast("Введите название товара"); return; }
+        if(isNaN(price)) { showToast("Введите цену"); return; }
+        goodsCatalog.push({ name: name, price: price });
+        saveAll();
+        document.getElementById("goodName").value = "";
+        document.getElementById("goodPrice").value = "";
+        showToast(`Товар "${name}" добавлен в каталог (${price} RUB)`);
+        await sendGoodsNotification(name, price);
+    });
+
+    window.removeGood = function(index) {
+        let removed = goodsCatalog[index];
+        goodsCatalog.splice(index,1);
+        saveAll();
+        showToast(`Товар "${removed.name}" удалён из каталога`);
+    };
+
+    document.getElementById("depositBtn")?.addEventListener("click",()=>{
+        if (depositCooldown) { showToast("⏳ Подождите 1 секунду перед следующим пополнением"); return; }
+        let sum = parseFloat(document.getElementById("depositSum").value);
+        if(isNaN(sum) || sum <= 0) { showToast("Введите сумму пополнения (положительное число)"); return; }
+        depositCooldown = true;
+        setCooldown("depositBtn", 1);
+        setTimeout(() => { depositCooldown = false; }, 1000);
+        obshak += sum;
+        financeHistory.unshift(`💰 Пополнение общака: +${sum} RUB`);
+        saveAll();
+        document.getElementById("depositSum").value = "";
+        showToast(`Общак пополнен на ${sum} RUB`);
+    });
+    
+    document.getElementById("withdrawBtn")?.addEventListener("click",()=>{
+        let sum = parseFloat(document.getElementById("depositSum").value);
+        if(isNaN(sum) || sum <= 0) { showToast("Введите сумму для выдачи (положительное число)"); return; }
+        if(obshak < sum) { showToast("Недостаточно средств в общаке"); return; }
+        obshak -= sum;
+        financeHistory.unshift(`🏧 Выдача из общака: -${sum} RUB (на дело/зарплата)`);
+        saveAll();
+        showToast(`Выдано ${sum} RUB из общака`);
+        document.getElementById("depositSum").value = "";
+    });
+
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panes = {
+        dashboard: document.getElementById('dashboardPane'),
+        jobs: document.getElementById('jobsPane'),
+        goods: document.getElementById('goodsPane'),
+        finance: document.getElementById('financePane')
+    };
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            Object.values(panes).forEach(pane => pane.classList.remove('active-pane'));
+            if(panes[tabId]) panes[tabId].classList.add('active-pane');
+            tabs.forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+    
+    document.querySelectorAll('[data-nav]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const section = e.target.getAttribute('data-nav');
+            if(section === 'about') showToast('Darkside Crew — крыша и легальный бизнес в Доброграде. Все вопросы решаются.');
+            if(section === 'contacts') showToast('Связь через дискорд: discord.gg/tfJNMs3GBU или почта dark@dobrograd.ru');
+            if(section === 'apply') showToast('Подать заявку можно через штаб: напишите лидеру shcolar.');
+        });
+    });
+
+    refreshUI();
+</script>
+</body>
+</html>
