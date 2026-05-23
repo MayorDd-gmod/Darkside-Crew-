@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Darkside Crew</title>
-    <!-- favicon (иконка вкладки) -->
+    <title>Darkside Crew | Панель управления бандой</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/MayorDd-gmod/Darkside-Crew-/main/%D0%90%D1%84%D1%80%D0%BE-%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%86%D1%8B%20%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF%20%D0%B1%D0%B0%D0%BD%D0%B4%D1%8B!-round.png">
     <style>
         * {
@@ -89,6 +88,53 @@
         }
         .nav-links a:hover { color: white; text-shadow: 0 0 4px #7b4eff; }
 
+        .login-container {
+            max-width: 480px;
+            margin: 60px auto;
+            background: #11172bdd;
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 40px 32px;
+            border: 1px solid #2f3a6b;
+            text-align: center;
+        }
+        .login-container h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        .login-container p {
+            color: #8f9ed4;
+            margin-bottom: 28px;
+        }
+        .login-input {
+            width: 100%;
+            background: #0c1126;
+            border: 1px solid #2a3460;
+            padding: 14px 18px;
+            border-radius: 60px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(95deg, #7b4eff, #b146ff);
+            border: none;
+            padding: 14px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-btn:hover { transform: scale(0.98); background: #623bdd; }
+        .error-msg {
+            color: #ff7b72;
+            font-size: 14px;
+            margin-top: 12px;
+        }
+
         .tabs {
             display: flex;
             gap: 16px;
@@ -121,14 +167,11 @@
             background: linear-gradient(90deg, #7b4eff, #ff3c7e);
             border-radius: 3px;
         }
-
         .tab-pane {
             display: none;
             animation: fade 0.3s ease;
         }
-        .tab-pane.active-pane {
-            display: block;
-        }
+        .tab-pane.active-pane { display: block; }
         @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
         .card {
@@ -164,11 +207,10 @@
         }
         .btn-primary {
             background: linear-gradient(95deg, #7b4eff, #b146ff);
-            box-shadow: 0 4px 12px rgba(123,78,255,0.3);
         }
         .btn-primary:hover { transform: scale(0.97); background: #623bdd; }
         .btn-outline { background: transparent; border: 1px solid #5e6da8; }
-        input, textarea, select {
+        input, textarea {
             background: #0c1126;
             border: 1px solid #2a3460;
             padding: 10px 16px;
@@ -183,27 +225,13 @@
             border-radius: 40px;
             font-size: 12px;
         }
-        .footer { 
-            text-align: center; 
-            padding: 32px 0 24px; 
-            color: #5d6b9e; 
-            font-size: 13px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .toast {
-            position: fixed; bottom: 30px; right: 20px; background: #1e2748; padding: 12px 20px; border-radius: 40px;
-            border-left: 4px solid #5eff8e; z-index: 1200; animation: fadeOut 2.5s forwards;
-        }
-        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        hr { border-color: #2f3a66; margin: 16px 0; }
-        .job-item {
+        .job-item, .member-item {
             background:#0f1629; border-radius:20px; padding:14px; margin-bottom:12px;
-        }
-        .cd-disabled {
-            pointer-events: none;
-            opacity: 0.6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
         }
         .goods-grid {
             display: grid;
@@ -218,16 +246,6 @@
             text-align: center;
             border-left: 3px solid #7b4eff;
         }
-        .good-card h4 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        .good-price {
-            font-size: 22px;
-            font-weight: bold;
-            color: #e2a526;
-            margin: 10px 0;
-        }
         .discord-link {
             display: inline-flex;
             align-items: center;
@@ -238,23 +256,64 @@
             color: white;
             text-decoration: none;
             font-weight: 600;
-            transition: 0.2s;
             margin-top: 15px;
         }
-        .discord-link:hover {
-            background: #4752c4;
-            transform: scale(1.02);
+        .footer {
+            text-align: center;
+            padding: 32px 0 24px;
+            color: #5d6b9e;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
+        .toast {
+            position: fixed; bottom: 30px; right: 20px; background: #1e2748; padding: 12px 20px; border-radius: 40px;
+            border-left: 4px solid #5eff8e; z-index: 1200; animation: fadeOut 2.5s forwards;
+        }
+        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        .role-badge { background: #2c3e8f; padding: 4px 12px; border-radius: 40px; font-size: 12px; font-weight: 500; }
+        .admin-badge { background: #a855f7; }
         .section-logo {
-            display: block;
-            margin: 0 auto 16px auto;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #7b4eff;
-            background: #0a0f1c;
-            padding: 4px;
+            display: block; margin: 0 auto 16px auto; width: 80px; height: 80px; border-radius: 50%;
+            object-fit: cover; border: 2px solid #7b4eff; background: #0a0f1c; padding: 4px;
+        }
+        .rank-select {
+            background: #1a2340;
+            border: 1px solid #3f4a7c;
+            border-radius: 40px;
+            padding: 10px 16px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .rank-select option {
+            background: #0f1629;
+            color: white;
+        }
+        .change-pwd {
+            background: #2a3550;
+            border: 1px solid #5e6da8;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .change-pwd:hover {
+            background: #3f4a7c;
+        }
+        .disabled-input {
+            background: #1a1f30;
+            color: #8f9ed4;
+            cursor: not-allowed;
+        }
+        .permission-info {
+            font-size: 12px;
+            color: #a5b2e8;
+            margin-top: 8px;
+            text-align: center;
         }
     </style>
 </head>
@@ -263,7 +322,6 @@
 <div class="container">
     <div class="header">
         <div class="logo-area">
-            <!-- Логотип -->
             <img class="logo-img" src="https://raw.githubusercontent.com/MayorDd-gmod/Darkside-Crew-/main/%D0%90%D1%84%D1%80%D0%BE-%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%86%D1%8B%20%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF%20%D0%B1%D0%B0%D0%BD%D0%B4%D1%8B!-round.png" alt="Darkside Crew Logo">
             <div class="logo">
                 <h1>◈ DARKSiDE CREW ◈</h1>
@@ -277,108 +335,151 @@
         </div>
     </div>
 
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="dashboard">🏠 Штаб</button>
-        <button class="tab-btn" data-tab="jobs">💰 Дела / Заказы</button>
-        <button class="tab-btn" data-tab="goods">📦 Каталог товаров</button>
-        <button class="tab-btn" data-tab="finance">📦 Общак & Финансы</button>
+    <!-- СТРАНИЦА ВХОДА -->
+    <div id="loginPage" style="display: block;">
+        <div class="login-container">
+            <h2>🔐 Вход в управление бандой</h2>
+            <p>Только для членов Darkside Crew</p>
+            <input type="text" id="loginUsername" class="login-input" placeholder="Логин">
+            <input type="password" id="loginPassword" class="login-input" placeholder="Пароль">
+            <button class="login-btn" id="doLoginBtn">Войти</button>
+            <div id="loginError" class="error-msg"></div>
+        </div>
     </div>
 
-    <!-- ШТАБ -->
-    <div id="dashboardPane" class="tab-pane active-pane">
-        <div class="grid-2">
-            <div class="stat-card"><div class="tag">⭐ Влияние</div><div style="font-size: 32px; font-weight:800;">8.4K</div><div>Рейтинг: ★★★★☆</div></div>
-            <div class="stat-card"><div class="tag">💰 Общак</div><div style="font-size: 32px;" id="obshakBalance">0</div><div>RUB</div></div>
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
+    <div id="mainApp" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+            <div><span class="tag">👑 Текущий аккаунт: <span id="currentUserSpan"></span></span></div>
+            <button class="btn btn-outline" id="changeOwnPasswordBtn">🔐 Сменить мой пароль</button>
+            <button class="btn btn-outline" id="logoutMainBtn">🚪 Выйти</button>
         </div>
-        <div class="card">
-            <img class="section-logo" src="https://raw.githubusercontent.com/MayorDd-gmod/Darkside-Crew-/main/%D0%90%D1%84%D1%80%D0%BE-%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%86%D1%8B%20%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF%20%D0%B1%D0%B0%D0%BD%D0%B4%D1%8B!-round.png" alt="Darkside Crew Logo">
-            <h3>🔮 Сводка Darkside Crew</h3>
-            <p>Банда занимается «легальными» бизнесами и крышует предпринимателей в Доброграде. Полный контроль, защита и решение любых вопросов за долю.</p>
-            <div style="margin-top: 20px;">
-                <span class="tag">🔹 Статус: активна</span> 
-                <span class="tag">🔹 Лидер: shcolar</span> 
-                <span class="tag">🔹 Сделок за неделю: 14</span>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="dashboard">🏠 Штаб</button>
+            <button class="tab-btn" data-tab="jobs">💰 Дела / Заказы</button>
+            <button class="tab-btn" data-tab="goods">📦 Каталог товаров</button>
+            <button class="tab-btn" data-tab="finance">💰 Общак & Финансы</button>
+            <button class="tab-btn" data-tab="members">👥 Участники банды</button>
+        </div>
+
+        <!-- ШТАБ -->
+        <div id="dashboardPane" class="tab-pane active-pane">
+            <div class="grid-2">
+                <div class="stat-card"><div class="tag">⭐ Влияние</div><div style="font-size: 32px;">8.4K</div><div>Рейтинг: ★★★★☆</div></div>
+                <div class="stat-card"><div class="tag">💰 Общак</div><div style="font-size: 32px;" id="obshakBalance">0</div><div>RUB</div></div>
             </div>
-            <div style="margin-top: 25px;">
-                <a href="https://discord.gg/tfJNMs3GBU" target="_blank" class="discord-link">
-                    💬 Официальный Discord банды
-                </a>
+            <div class="card">
+                <img class="section-logo" src="https://raw.githubusercontent.com/MayorDd-gmod/Darkside-Crew-/main/%D0%90%D1%84%D1%80%D0%BE-%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B0%D0%BD%D1%86%D1%8B%20%D0%BB%D0%BE%D0%B3%D0%BE%D1%82%D0%B8%D0%BF%20%D0%B1%D0%B0%D0%BD%D0%B4%D1%8B!-round.png">
+                <h3>🔮 Сводка Darkside Crew</h3>
+                <p>Банда занимается «легальными» бизнесами и крышует предпринимателей в Доброграде.</p>
+                <div style="margin-top: 20px;">
+                    <span class="tag">🔹 Лидер: Shcolar</span> 
+                    <span class="tag">🔹 Правая рука: Dunya</span>
+                </div>
+                <a href="https://discord.gg/tfJNMs3GBU" target="_blank" class="discord-link">💬 Официальный Discord банды</a>
             </div>
         </div>
-    </div>
 
-    <!-- ДЕЛА / ЗАКАЗЫ -->
-    <div id="jobsPane" class="tab-pane">
-        <div class="card">
-            <h3>💰 Активные дела (контракты)</h3>
-            <div id="jobsList"></div>
-            <hr>
-            <h4>➕ Новый заказ</h4>
-            <input type="text" id="jobTitle" placeholder="Название дела">
-            <input type="text" id="jobRewardInput" placeholder="Награда (RUB, можно прочерк '-')">
-            <textarea id="jobDesc" rows="2" placeholder="Описание"></textarea>
-            <button class="btn btn-primary" id="createJobBtn">🔨 Создать заказ</button>
-        </div>
-    </div>
-
-    <!-- КАТАЛОГ ТОВАРОВ -->
-    <div id="goodsPane" class="tab-pane">
-        <div class="card">
-            <h3>📦 Каталог активных товаров / оружие / амуниция</h3>
-            <div class="goods-grid" id="goodsContainer"></div>
-            <hr>
-            <h4>➕ Добавить товар в каталог</h4>
-            <input type="text" id="goodName" placeholder="Название товара">
-            <input type="number" id="goodPrice" placeholder="Цена (RUB)">
-            <button class="btn btn-primary" id="addGoodBtn">➕ Добавить товар</button>
-        </div>
-    </div>
-
-    <!-- ФИНАНСЫ / ОБЩАК -->
-    <div id="financePane" class="tab-pane">
-        <div class="card">
-            <h3>💰 Банковский общак</h3>
-            <div style="font-size: 40px; font-weight:800;" id="obshakBalanceLarge">0</div>
-            <div style="display: flex; gap: 16px; margin: 24px 0;">
-                <input type="number" id="depositSum" placeholder="Сумма (не ограничена)">
-                <button class="btn btn-primary" id="depositBtn">💸 Внести в общак</button>
-                <button class="btn btn-outline" id="withdrawBtn">🏧 Выдать на дело</button>
+        <!-- ДЕЛА / ЗАКАЗЫ (только админы могут создавать) -->
+        <div id="jobsPane" class="tab-pane">
+            <div class="card">
+                <h3>💰 Активные дела</h3>
+                <div id="jobsList"></div>
+                <hr>
+                <h4>➕ Новый заказ</h4>
+                <input type="text" id="jobTitle" placeholder="Название дела">
+                <input type="text" id="jobRewardInput" placeholder="Награда (RUB, можно прочерк '-')">
+                <textarea id="jobDesc" rows="2" placeholder="Описание"></textarea>
+                <button class="btn btn-primary" id="createJobBtn">🔨 Создать</button>
+                <div class="permission-info" id="jobsPermissionInfo"></div>
             </div>
-            <div id="financeLog" style="background:#0b1022; border-radius: 20px; padding: 12px;"></div>
+        </div>
+
+        <!-- КАТАЛОГ ТОВАРОВ (только админы могут добавлять) -->
+        <div id="goodsPane" class="tab-pane">
+            <div class="card">
+                <h3>📦 Каталог товаров</h3>
+                <div class="goods-grid" id="goodsContainer"></div>
+                <hr>
+                <h4>➕ Добавить товар</h4>
+                <input type="text" id="goodName" placeholder="Название">
+                <input type="number" id="goodPrice" placeholder="Цена (RUB)">
+                <button class="btn btn-primary" id="addGoodBtn">➕ Добавить</button>
+                <div class="permission-info" id="goodsPermissionInfo"></div>
+            </div>
+        </div>
+
+        <!-- ФИНАНСЫ / ОБЩАК (только админы могут вносить/выдавать) -->
+        <div id="financePane" class="tab-pane">
+            <div class="card">
+                <h3>💰 Общак</h3>
+                <div style="font-size: 40px;" id="obshakBalanceLarge">0</div>
+                <div style="display: flex; gap: 16px; margin: 24px 0;">
+                    <input type="number" id="depositSum" placeholder="Сумма">
+                    <button class="btn btn-primary" id="depositBtn">💸 Внести</button>
+                    <button class="btn btn-outline" id="withdrawBtn">🏧 Выдать</button>
+                </div>
+                <div id="financeLog" style="background:#0b1022; border-radius: 20px; padding: 12px;"></div>
+                <div class="permission-info" id="financePermissionInfo"></div>
+            </div>
+        </div>
+
+        <!-- УЧАСТНИКИ БАНДЫ (только админы могут добавлять/исключать/менять пароли) -->
+        <div id="membersPane" class="tab-pane">
+            <div class="card">
+                <h3>👥 Участники банды</h3>
+                <div id="membersList"></div>
+                <hr>
+                <h4>➕ Принять нового члена</h4>
+                <input type="text" id="newMemberName" placeholder="Никнейм">
+                <select id="newMemberRole" class="rank-select">
+                    <option value="Бегунок">🏃 Бегунок</option>
+                    <option value="Боец">⚔️ Боец</option>
+                    <option value="Крышевало">🛡️ Крышевало</option>
+                    <option value="Дилер">💰 Дилер</option>
+                    <option value="Логист">📦 Логист</option>
+                    <option value="Правая рука">👑 Правая рука</option>
+                    <option value="Лидер">👑 Лидер</option>
+                </select>
+                <input type="text" id="newMemberPass" placeholder="Пароль">
+                <button class="btn btn-primary" id="addMemberBtn">➕ Принять в банду</button>
+                <div class="permission-info" id="membersPermissionInfo"></div>
+            </div>
         </div>
     </div>
 
     <div class="footer">
         <div>© Darkside Crew - Криминальная банда.</div>
-        <div>© Это сайт для Ролевой Игры крим. фракции, он никак не связан с реальными ОПГ.</div>
+        <div>© Сайт для ролевой игры, не связан с реальными ОПГ.</div>
     </div>
 </div>
 
 <script>
-    // ----- ВЕБХУК DISCORD -----
-    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1507608110792183859/MhNRYv5SWCtZ6D35qfL_EBFoaewKob--uXHnnBLpCs1SS1A9C3Rqq11PAfKP9bO6JdkR";
+    // ======================== АККАУНТЫ С НОВЫМИ ПАРОЛЯМИ ========================
+    let gangMembers = JSON.parse(localStorage.getItem("darkside_members_v5")) || [
+        { username: "Shcolar", password: "111111228", role: "Лидер", isAdmin: true },
+        { username: "Dunya", password: "DBG48148DDR", role: "Правая рука", isAdmin: true }
+    ];
+    let currentUser = null;
 
-    // ----- ДАННЫЕ -----
+    // ======================== ДАННЫЕ БАНДЫ ========================
     let obshak = parseInt(localStorage.getItem("darkside_obshak")) || 0;
     let jobs = JSON.parse(localStorage.getItem("darkside_jobs")) || [
-        { title: "Охрана VIP", reward: 7500, desc: "Сопровождение груза", status: "active" },
-        { title: "Крыша для бара", reward: 12000, desc: "Ежемесячная плата за защиту", status: "active" }
+        { title: "Охрана VIP", reward: 7500, desc: "Сопровождение груза" },
+        { title: "Крыша для бара", reward: 12000, desc: "Ежемесячная плата" }
     ];
     let financeHistory = JSON.parse(localStorage.getItem("darkside_finlog")) || [];
-    
     let goodsCatalog = JSON.parse(localStorage.getItem("darkside_goods")) || [
-        { name: "Glock-17", price: 15000 },
-        { name: "Бронежилет 3 класс", price: 25000 },
-        { name: "Тактическая аптечка", price: 8500 },
-        { name: "Глушитель", price: 12000 },
-        { name: "Рация Motorola", price: 7000 }
+        { name: "Glock-17", price: 15000 }, { name: "Бронежилет", price: 25000 },
+        { name: "Аптечка", price: 8500 }, { name: "Глушитель", price: 12000 }
     ];
 
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1507608110792183859/MhNRYv5SWCtZ6D35qfL_EBFoaewKob--uXHnnBLpCs1SS1A9C3Rqq11PAfKP9bO6JdkR";
     let depositCooldown = false;
 
     function showToast(msg) { let t=document.createElement("div"); t.className="toast"; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
-    
     function saveAll() {
+        localStorage.setItem("darkside_members_v5", JSON.stringify(gangMembers));
         localStorage.setItem("darkside_obshak", obshak);
         localStorage.setItem("darkside_jobs", JSON.stringify(jobs));
         localStorage.setItem("darkside_finlog", JSON.stringify(financeHistory));
@@ -386,246 +487,260 @@
         refreshUI();
     }
 
-    async function sendDiscordNotification(jobTitle, jobRewardDisplay, jobDesc) {
-        const embed = {
-            title: "🔫 НОВЫЙ ЗАКАЗ В БАНДЕ",
-            description: `**${jobTitle}**\n${jobDesc}`,
-            color: 0x7b4eff,
-            fields: [
-                { name: "💰 Награда", value: jobRewardDisplay, inline: true },
-                { name: "📅 Время", value: new Date().toLocaleString(), inline: false }
-            ],
-            footer: { text: "Darkside Crew • Ожидает исполнителей" }
-        };
-        try {
-            await fetch(DISCORD_WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ embeds: [embed] })
-            });
-            showToast("📢 Заказ продублирован в Discord");
-        } catch(e) { console.warn("webhook error", e); }
+    async function sendDiscordNotification(jobTitle, reward, desc) {
+        try { await fetch(DISCORD_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: `🔫 НОВЫЙ ЗАКАЗ: ${jobTitle}\n💰 Награда: ${reward}\n📝 ${desc}` }) }); } catch(e) {}
+    }
+    async function sendGoodsNotification(name, price) {
+        try { await fetch(DISCORD_WEBHOOK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: `📦 НОВЫЙ ТОВАР: ${name} | Цена: ${price} RUB` }) }); } catch(e) {}
     }
 
-    async function sendGoodsNotification(goodName, goodPrice) {
-        const embed = {
-            title: "📦 НОВЫЙ ТОВАР В КАТАЛОГЕ БАНДЫ",
-            description: `**${goodName}**`,
-            color: 0xe2a526,
-            fields: [
-                { name: "💰 Цена", value: `${goodPrice} RUB`, inline: true },
-                { name: "📅 Время добавления", value: new Date().toLocaleString(), inline: false }
-            ],
-            footer: { text: "Darkside Crew • Каталог обновлён" }
-        };
-        try {
-            await fetch(DISCORD_WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ embeds: [embed] })
-            });
-            showToast("📢 Товар продублирован в Discord");
-        } catch(e) { console.warn("webhook error", e); }
+    function isAdmin() { return currentUser && currentUser.isAdmin === true; }
+
+    function updatePermissionsUI() {
+        const admin = isAdmin();
+        // Дела / Заказы
+        const jobTitleInput = document.getElementById("jobTitle");
+        const jobRewardInput = document.getElementById("jobRewardInput");
+        const jobDescInput = document.getElementById("jobDesc");
+        const createJobBtn = document.getElementById("createJobBtn");
+        const jobsPermInfo = document.getElementById("jobsPermissionInfo");
+        if (jobTitleInput) jobTitleInput.disabled = !admin;
+        if (jobRewardInput) jobRewardInput.disabled = !admin;
+        if (jobDescInput) jobDescInput.disabled = !admin;
+        if (createJobBtn) createJobBtn.disabled = !admin;
+        if (jobsPermInfo) jobsPermInfo.innerHTML = admin ? "✅ У вас есть права на создание заказов" : "⛔ Только лидер или правая рука могут создавать заказы";
+
+        // Каталог товаров
+        const goodNameInput = document.getElementById("goodName");
+        const goodPriceInput = document.getElementById("goodPrice");
+        const addGoodBtn = document.getElementById("addGoodBtn");
+        const goodsPermInfo = document.getElementById("goodsPermissionInfo");
+        if (goodNameInput) goodNameInput.disabled = !admin;
+        if (goodPriceInput) goodPriceInput.disabled = !admin;
+        if (addGoodBtn) addGoodBtn.disabled = !admin;
+        if (goodsPermInfo) goodsPermInfo.innerHTML = admin ? "✅ У вас есть права на добавление товаров" : "⛔ Только лидер или правая рука могут добавлять товары";
+
+        // Финансы / Общак
+        const depositSumInput = document.getElementById("depositSum");
+        const depositBtn = document.getElementById("depositBtn");
+        const withdrawBtn = document.getElementById("withdrawBtn");
+        const financePermInfo = document.getElementById("financePermissionInfo");
+        if (depositSumInput) depositSumInput.disabled = !admin;
+        if (depositBtn) depositBtn.disabled = !admin;
+        if (withdrawBtn) withdrawBtn.disabled = !admin;
+        if (financePermInfo) financePermInfo.innerHTML = admin ? "✅ У вас есть права на управление общаком" : "⛔ Только лидер или правая рука могут изменять баланс общака";
+
+        // Участники (добавление)
+        const newMemberNameInput = document.getElementById("newMemberName");
+        const newMemberRoleSelect = document.getElementById("newMemberRole");
+        const newMemberPassInput = document.getElementById("newMemberPass");
+        const addMemberBtn = document.getElementById("addMemberBtn");
+        const membersPermInfo = document.getElementById("membersPermissionInfo");
+        if (newMemberNameInput) newMemberNameInput.disabled = !admin;
+        if (newMemberRoleSelect) newMemberRoleSelect.disabled = !admin;
+        if (newMemberPassInput) newMemberPassInput.disabled = !admin;
+        if (addMemberBtn) addMemberBtn.disabled = !admin;
+        if (membersPermInfo) membersPermInfo.innerHTML = admin ? "✅ У вас есть права на управление составом банды" : "⛔ Только лидер или правая рука могут изменять состав банды";
     }
 
     function refreshUI() {
-        const balanceElements = ["obshakBalance", "obshakBalanceLarge"];
-        balanceElements.forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.innerText = obshak.toLocaleString();
-        });
-        
-        const jobsContainer = document.getElementById("jobsList");
-        if(jobsContainer) {
-            jobsContainer.innerHTML = "";
-            jobs.forEach((job, i) => {
-                let div = document.createElement("div");
-                div.className = "job-item";
-                let rewardDisplay = (job.reward === null || job.reward === undefined || job.reward === '') ? '—' : `${job.reward} RUB`;
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between;">
-                        <strong>📌 ${escapeHtml(job.title)}</strong> 
-                        <span class="tag">${rewardDisplay}</span>
-                    </div>
-                    <div style="font-size:13px; margin:8px 0;">${escapeHtml(job.desc)}</div>
-                    ${job.reward !== null && job.reward !== '' && typeof job.reward === 'number' ? `<button class="btn btn-outline" onclick="completeJob(${i})">✅ Выполнить (+${job.reward} в общак)</button>` : '<span class="tag">❗ Без награды (только для галочки)</span>'}
-                `;
-                jobsContainer.appendChild(div);
+        if (!currentUser) return;
+        document.getElementById("obshakBalance").innerText = obshak.toLocaleString();
+        document.getElementById("obshakBalanceLarge").innerText = obshak.toLocaleString();
+        document.getElementById("currentUserSpan").innerHTML = `${currentUser.username} <span class="role-badge">${currentUser.role}</span>`;
+
+        const jobsDiv = document.getElementById("jobsList");
+        if(jobsDiv) {
+            jobsDiv.innerHTML = "";
+            jobs.forEach((j, idx) => {
+                let rewardShow = j.reward ? j.reward + " RUB" : "—";
+                jobsDiv.innerHTML += `<div class="job-item"><div><strong>📌 ${escapeHtml(j.title)}</strong><br><span class="tag">${rewardShow}</span><br>${escapeHtml(j.desc)}</div><button class="btn btn-outline" onclick="completeJob(${idx})">✅ Выполнить</button></div>`;
             });
-            if(jobs.length === 0) jobsContainer.innerHTML = "<div class='job-item'>Нет активных дел. Создайте новый заказ.</div>";
         }
-        
-        const goodsContainer = document.getElementById("goodsContainer");
-        if(goodsContainer) {
-            goodsContainer.innerHTML = "";
-            goodsCatalog.forEach((good, idx) => {
-                let card = document.createElement("div");
-                card.className = "good-card";
-                card.innerHTML = `
-                    <h4>🔹 ${escapeHtml(good.name)}</h4>
-                    <div class="good-price">${good.price} RUB</div>
-                    <button class="btn btn-outline" onclick="removeGood(${idx})">🗑️ Удалить</button>
-                `;
-                goodsContainer.appendChild(card);
-            });
-            if(goodsCatalog.length === 0) goodsContainer.innerHTML = "<div class='good-card'>Каталог пуст. Добавьте товары.</div>";
+        const goodsDiv = document.getElementById("goodsContainer");
+        if(goodsDiv) {
+            goodsDiv.innerHTML = "";
+            goodsCatalog.forEach((g, idx) => { goodsDiv.innerHTML += `<div class="good-card"><h4>🔹 ${escapeHtml(g.name)}</h4><div class="good-price">${g.price} RUB</div><button class="btn btn-outline" onclick="removeGood(${idx})">🗑️ Удалить</button></div>`; });
         }
-        
         const logDiv = document.getElementById("financeLog");
-        if(logDiv) {
-            logDiv.innerHTML = financeHistory.slice(-8).reverse().map(h => `<div>🔹 ${escapeHtml(h)}</div>`).join('');
-            if(financeHistory.length===0) logDiv.innerHTML = "<div>Нет операций по общаку</div>";
+        if(logDiv) logDiv.innerHTML = financeHistory.slice(-6).reverse().map(h => `<div>🔹 ${h}</div>`).join('') || "<div>Нет операций</div>";
+        
+        const membersDiv = document.getElementById("membersList");
+        if(membersDiv) {
+            membersDiv.innerHTML = "";
+            gangMembers.forEach((m, idx) => {
+                let adminBadge = m.isAdmin ? '<span class="role-badge admin-badge">Админ</span>' : '';
+                let canManage = isAdmin();
+                membersDiv.innerHTML += `
+                    <div class="member-item">
+                        <div>
+                            <strong>${escapeHtml(m.username)}</strong> ${adminBadge}<br>
+                            <span class="tag">${m.role}</span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            ${canManage ? `<button class="change-pwd" onclick="showChangePasswordFor('${escapeHtml(m.username)}')">🔐 Сменить пароль</button>` : ''}
+                            ${canManage ? `<button class="btn btn-outline" onclick="removeMember(${idx})">❌ Исключить</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
         }
+        updatePermissionsUI();
     }
 
-    function escapeHtml(str) { 
-        if(!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if(m === '&') return '&amp;';
-            if(m === '<') return '&lt;';
-            if(m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    function setCooldown(buttonId, seconds) {
-        const btn = document.getElementById(buttonId);
-        if (!btn) return;
-        btn.disabled = true;
-        btn.classList.add('cd-disabled');
-        let timeLeft = seconds;
-        const originalText = btn.innerText;
-        btn.innerText = `⏳ ${timeLeft}с...`;
-        const interval = setInterval(() => {
-            timeLeft--;
-            if (timeLeft >= 0) btn.innerText = `⏳ ${timeLeft}с...`;
-            if (timeLeft < 0) {
-                clearInterval(interval);
-                btn.disabled = false;
-                btn.classList.remove('cd-disabled');
-                btn.innerText = originalText;
+    window.showChangePasswordFor = function(username) {
+        if (!isAdmin()) { showToast("Недостаточно прав"); return; }
+        let newPassword = prompt(`Введите новый пароль для участника ${username}:`);
+        if (newPassword && newPassword.trim() !== "") {
+            let member = gangMembers.find(m => m.username === username);
+            if (member) {
+                member.password = newPassword.trim();
+                saveAll();
+                showToast(`Пароль для ${username} успешно изменён!`);
+                if (currentUser && currentUser.username === username) {
+                    currentUser.password = newPassword.trim();
+                }
+            } else {
+                showToast("Участник не найден");
             }
-        }, 1000);
-    }
-
-    window.completeJob = function(index) {
-        let job = jobs[index];
-        if(!job) return;
-        if (typeof job.reward === 'number') {
-            obshak += job.reward;
-            financeHistory.unshift(`✅ Выполнено дело "${job.title}" +${job.reward} RUB в общак`);
-            showToast(`Дело выполнено! +${job.reward} RUB в общак`);
-        } else {
-            financeHistory.unshift(`✅ Выполнено дело "${job.title}" (без награды)`);
-            showToast(`Дело "${job.title}" отмечено выполненным (награды нет)`);
+        } else if (newPassword !== null) {
+            showToast("Пароль не может быть пустым");
         }
-        jobs.splice(index,1);
-        saveAll();
     };
 
+    document.getElementById("changeOwnPasswordBtn")?.addEventListener("click", () => {
+        if (!currentUser) return;
+        let newPassword = prompt(`Введите новый пароль для вашего аккаунта (${currentUser.username}):`);
+        if (newPassword && newPassword.trim() !== "") {
+            let member = gangMembers.find(m => m.username === currentUser.username);
+            if (member) {
+                member.password = newPassword.trim();
+                currentUser.password = newPassword.trim();
+                saveAll();
+                showToast("Ваш пароль успешно изменён!");
+            } else {
+                showToast("Ошибка: аккаунт не найден");
+            }
+        } else if (newPassword !== null) {
+            showToast("Пароль не может быть пустым");
+        }
+    });
+
+    window.completeJob = function(idx) {
+        let job = jobs[idx];
+        if(job.reward && typeof job.reward === 'number') { obshak += job.reward; financeHistory.unshift(`✅ Дело "${job.title}" +${job.reward} RUB`); }
+        else financeHistory.unshift(`✅ Дело "${job.title}" выполнено (без награды)`);
+        jobs.splice(idx,1); saveAll(); showToast("Дело выполнено!");
+    };
+    window.removeGood = function(idx) { goodsCatalog.splice(idx,1); saveAll(); showToast("Товар удалён"); };
+
     document.getElementById("createJobBtn")?.addEventListener("click", async () => {
+        if (!isAdmin()) { showToast("Недостаточно прав"); return; }
         let title = document.getElementById("jobTitle").value.trim();
         let rewardRaw = document.getElementById("jobRewardInput").value.trim();
         let desc = document.getElementById("jobDesc").value.trim();
-        if(!title) { showToast("Введите название дела"); return; }
-        
-        let rewardValue = null;
-        let rewardDisplayForDiscord = "—";
-        
-        if (rewardRaw === "" || rewardRaw === "-" || rewardRaw.toLowerCase() === "прочерк") {
-            rewardValue = null;
-            rewardDisplayForDiscord = "— (без награды)";
-        } else {
-            let parsed = parseFloat(rewardRaw);
-            if (isNaN(parsed) || parsed < 0) {
-                showToast("Награда должна быть числом >=0 либо прочерком '-'");
-                return;
-            }
-            rewardValue = parsed;
-            rewardDisplayForDiscord = `${rewardValue} RUB`;
-        }
-        
-        let finalDesc = desc || "Банда ждёт исполнителей";
-        jobs.push({ title: title, reward: rewardValue, desc: finalDesc, status:"active" });
+        if(!title) { showToast("Введите название"); return; }
+        let reward = null, rewardShow = "—";
+        if(rewardRaw !== "" && rewardRaw !== "-") { let p = parseFloat(rewardRaw); if(isNaN(p)||p<0) { showToast("Награда число или -"); return; } reward = p; rewardShow = p+" RUB"; }
+        jobs.push({ title, reward, desc: desc||"Банда ждёт" });
         saveAll();
-        document.getElementById("jobTitle").value="";
-        document.getElementById("jobRewardInput").value="";
-        document.getElementById("jobDesc").value="";
-        showToast(`Дело "${title}" добавлено`);
-        await sendDiscordNotification(title, rewardDisplayForDiscord, finalDesc);
+        document.getElementById("jobTitle").value=""; document.getElementById("jobRewardInput").value=""; document.getElementById("jobDesc").value="";
+        showToast(`Дело "${title}" создано`);
+        await sendDiscordNotification(title, rewardShow, desc);
     });
-
     document.getElementById("addGoodBtn")?.addEventListener("click", async () => {
+        if (!isAdmin()) { showToast("Недостаточно прав"); return; }
         let name = document.getElementById("goodName").value.trim();
         let price = parseFloat(document.getElementById("goodPrice").value);
-        if(!name) { showToast("Введите название товара"); return; }
-        if(isNaN(price)) { showToast("Введите цену"); return; }
-        goodsCatalog.push({ name: name, price: price });
+        if(!name || isNaN(price)) { showToast("Введите название и цену"); return; }
+        goodsCatalog.push({ name, price });
         saveAll();
-        document.getElementById("goodName").value = "";
-        document.getElementById("goodPrice").value = "";
-        showToast(`Товар "${name}" добавлен в каталог (${price} RUB)`);
+        document.getElementById("goodName").value=""; document.getElementById("goodPrice").value="";
+        showToast(`Товар "${name}" добавлен`);
         await sendGoodsNotification(name, price);
     });
-
-    window.removeGood = function(index) {
-        let removed = goodsCatalog[index];
-        goodsCatalog.splice(index,1);
-        saveAll();
-        showToast(`Товар "${removed.name}" удалён из каталога`);
-    };
-
     document.getElementById("depositBtn")?.addEventListener("click",()=>{
-        if (depositCooldown) { showToast("⏳ Подождите 1 секунду перед следующим пополнением"); return; }
+        if (!isAdmin()) { showToast("Недостаточно прав"); return; }
+        if(depositCooldown) { showToast("⏳ 1 секунда"); return; }
         let sum = parseFloat(document.getElementById("depositSum").value);
-        if(isNaN(sum) || sum <= 0) { showToast("Введите сумму пополнения (положительное число)"); return; }
-        depositCooldown = true;
-        setCooldown("depositBtn", 1);
-        setTimeout(() => { depositCooldown = false; }, 1000);
-        obshak += sum;
-        financeHistory.unshift(`💰 Пополнение общака: +${sum} RUB`);
-        saveAll();
-        document.getElementById("depositSum").value = "";
-        showToast(`Общак пополнен на ${sum} RUB`);
+        if(isNaN(sum)||sum<=0) { showToast("Сумма >0"); return; }
+        depositCooldown=true; setTimeout(()=>depositCooldown=false,1000);
+        obshak += sum; financeHistory.unshift(`💰 Пополнение +${sum} RUB`);
+        saveAll(); document.getElementById("depositSum").value=""; showToast(`+${sum} RUB в общак`);
     });
-    
     document.getElementById("withdrawBtn")?.addEventListener("click",()=>{
+        if (!isAdmin()) { showToast("Недостаточно прав"); return; }
         let sum = parseFloat(document.getElementById("depositSum").value);
-        if(isNaN(sum) || sum <= 0) { showToast("Введите сумму для выдачи (положительное число)"); return; }
-        if(obshak < sum) { showToast("Недостаточно средств в общаке"); return; }
-        obshak -= sum;
-        financeHistory.unshift(`🏧 Выдача из общака: -${sum} RUB (на дело/зарплата)`);
-        saveAll();
-        showToast(`Выдано ${sum} RUB из общака`);
-        document.getElementById("depositSum").value = "";
+        if(isNaN(sum)||sum<=0) { showToast("Сумма >0"); return; }
+        if(obshak<sum) { showToast("Не хватает"); return; }
+        obshak -= sum; financeHistory.unshift(`🏧 Выдача -${sum} RUB`);
+        saveAll(); showToast(`Выдано ${sum} RUB`);
     });
 
-    const tabs = document.querySelectorAll('.tab-btn');
-    const panes = {
-        dashboard: document.getElementById('dashboardPane'),
-        jobs: document.getElementById('jobsPane'),
-        goods: document.getElementById('goodsPane'),
-        finance: document.getElementById('financePane')
+    function isCurrentAdmin() { return currentUser && currentUser.isAdmin === true; }
+    document.getElementById("addMemberBtn")?.addEventListener("click",()=>{
+        if(!isCurrentAdmin()) { showToast("Только лидер или правая рука могут добавлять"); return; }
+        let name = document.getElementById("newMemberName").value.trim();
+        let role = document.getElementById("newMemberRole").value;
+        let pass = document.getElementById("newMemberPass").value.trim();
+        if(!name || !pass) { showToast("Введите ник и пароль"); return; }
+        if(gangMembers.find(m=>m.username===name)) { showToast("Уже есть"); return; }
+        let isAdminRole = (role === "Лидер" || role === "Правая рука");
+        gangMembers.push({ username: name, password: pass, role: role, isAdmin: isAdminRole });
+        saveAll();
+        document.getElementById("newMemberName").value=""; document.getElementById("newMemberPass").value="";
+        showToast(`${name} принят в банду (${role})!`);
+    });
+    window.removeMember = function(idx) {
+        if(!isCurrentAdmin()) { showToast("Недостаточно прав"); return; }
+        let removed = gangMembers[idx];
+        if(removed.isAdmin && currentUser.username !== "Shcolar") { showToast("Только лидер может исключить другого админа"); return; }
+        gangMembers.splice(idx,1);
+        saveAll();
+        showToast(`${removed.username} исключён`);
     };
+
+    document.getElementById("doLoginBtn")?.addEventListener("click",()=>{
+        let user = document.getElementById("loginUsername").value.trim();
+        let pass = document.getElementById("loginPassword").value;
+        let member = gangMembers.find(m=>m.username===user && m.password===pass);
+        if(member) {
+            currentUser = member;
+            document.getElementById("loginPage").style.display = "none";
+            document.getElementById("mainApp").style.display = "block";
+            refreshUI();
+            showToast(`Добро пожаловать, ${member.username} (${member.role})`);
+        } else { document.getElementById("loginError").innerText = "Неверный логин или пароль"; }
+    });
+    document.getElementById("logoutMainBtn")?.addEventListener("click",()=>{
+        currentUser = null;
+        document.getElementById("loginPage").style.display = "block";
+        document.getElementById("mainApp").style.display = "none";
+        document.getElementById("loginError").innerText = "";
+        showToast("Вы вышли");
+    });
+
+    const tabs = document.querySelectorAll('#mainApp .tab-btn');
+    const panesMap = { dashboard:'dashboardPane', jobs:'jobsPane', goods:'goodsPane', finance:'financePane', members:'membersPane' };
     tabs.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabId = btn.getAttribute('data-tab');
-            Object.values(panes).forEach(pane => pane.classList.remove('active-pane'));
-            if(panes[tabId]) panes[tabId].classList.add('active-pane');
-            tabs.forEach(t => t.classList.remove('active'));
+        btn.addEventListener('click',()=>{
+            let tab = btn.getAttribute('data-tab');
+            Object.values(panesMap).forEach(p => document.getElementById(p)?.classList.remove('active-pane'));
+            document.getElementById(panesMap[tab])?.classList.add('active-pane');
+            tabs.forEach(t=>t.classList.remove('active'));
             btn.classList.add('active');
         });
     });
-    
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
     document.querySelectorAll('[data-nav]').forEach(link => {
         link.addEventListener('click', (e) => {
-            const section = e.target.getAttribute('data-nav');
-            if(section === 'about') showToast('Darkside Crew — крыша и легальный бизнес в Доброграде. Все вопросы решаются.');
-            if(section === 'contacts') showToast('Связь через дискорд: discord.gg/tfJNMs3GBU или почта dark@dobrograd.ru');
-            if(section === 'apply') showToast('Подать заявку можно через штаб: напишите лидеру shcolar.');
+            let s = e.target.getAttribute('data-nav');
+            if(s==='about') showToast('Darkside Crew — крышуем бизнес, решаем вопросы.');
+            if(s==='contacts') showToast('Discord: discord.gg/tfJNMs3GBU');
+            if(s==='apply') showToast('Подать заявку лидеру Shcolar.');
         });
     });
-
     refreshUI();
 </script>
 </body>
